@@ -20,6 +20,8 @@ def get_igsn_xrd_links(igsn: str, client):
 
     for resource_type_key, resource_type_list in resources.items():
         for resource in resource_type_list:
+            if not resource['name'].endswith('_xrd.csv'):
+                continue
             metadata = client.get(
                 f"resource/{resource['_id']}",
                 parameters={'type': resource_type_key}
@@ -32,6 +34,7 @@ def get_igsn_xrd_links(igsn: str, client):
             link = f"https://data.htmdec.org/#{resource_type_key}/{resource['_id']}"
             if kafka_ok or dataflow_ok:
                 links.append(link)
+
 
     return links
 
@@ -162,7 +165,7 @@ def main():
     # ---------------------------------------
     # Process each PDV file
     # ---------------------------------------
-    results = df["PDV_FileName"].apply(
+    results_df = df["PDV_FileName"].apply(
         lambda x: run_and_extract(
             x,
             client=client,
@@ -170,16 +173,15 @@ def main():
             config=alpss_config,
             output_dir="pdv_results",
         )
-    )
+    ).apply(pd.Series)
 
-    df["velocity-time history"] = results.apply(lambda r: r[0])
-    df["Flyer velocity"] = results.apply(lambda r: r[1])
-    df["spall strength"] = results.apply(lambda r: r[2])
+    results_df.columns = [
+        "velocity-time history",
+        "Flyer velocity",
+        "spall strength",
+    ]
 
-
-
-
-    # final = pd.concat([df, results_df], axis=1)
+    df = pd.concat([df, results_df], axis=1)
 
     # ---------------------------------------
     # Save XLSX
