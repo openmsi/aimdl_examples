@@ -4,27 +4,34 @@ import os
 import pandas as pd
 import numpy as np
 
-def download_csv_to_numpy(client, file_link):
-    # Extract ID from link 
+# -------------------------------
+# Convert a CSV file from Girder into numeric numpy array
+# -------------------------------
+def download_csv_to_numpy(client, file_link: str) -> np.ndarray:
     item_id = file_link.split('/')[-1]
 
+    # Get item files
     files = client.get(f"item/{item_id}/files")
-    file_id = files[0]['_id']
+    if not files:
+        raise ValueError(f"No files found for item {item_id}")
 
-    # Download into buffer
+    file_id = files[0]["_id"]
+
+    # Download
     buf = io.BytesIO()
     client.downloadFile(file_id, buf)
     buf.seek(0)
 
-    # read CSV with pandas
-    df = pd.read_csv(buf)
+    # Load CSV
+    try:
+        df = pd.read_csv(buf)
+    except Exception as e:
+        raise ValueError(f"Failed reading CSV for {file_link}: {e}")
 
-    # keep only numeric columns
+    # Keep numeric only
     numeric_df = df.select_dtypes(include=["number"])
 
-    # convert to numpy
     return numeric_df.to_numpy()
-
 
 def get_igsn_xrd_links(igsn: str, client):
     params = {
