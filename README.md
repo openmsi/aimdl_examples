@@ -44,8 +44,10 @@ pip install -r requirements.txt
 
 Create a .env file containing:
 
+```
 GIRDER_API_URL=https://data.htmdec.org/api/v1
 HTMDEC_GIRDER_API_KEY=your_api_key_here
+```
 
 ## Usage
 
