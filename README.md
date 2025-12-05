@@ -1,78 +1,51 @@
-# README
+## Augmentation Utilities
 
-## Overview
+This repository provides helper functions for interacting with experimental data stored in Girder.
+You can use these utilities to:
 
-This script processes **laser shock experiments**. Each experiment is associated with a **sample** identified by an **IGSN**, and each experiment has a corresponding **PDV trace**. The script performs the following tasks:
+- find all XRD measurement files associated with a sample (through their [IGSN](https://ev.igsn.org/)),
+- download XRD CSVs as clean numeric NumPy arrays through their Girder links,
+- extract ALPSS-generated metrics (flyer velocity, spall strength),
+- and fetch velocity-time history traces through their Girder links.
 
-1. Reads an Excel spreadsheet containing at least:
+Each function is standalone and can be directly imported into notebooks or scripts.
 
-   * `IGSN`
-   * `PDV_FileName`
+Examples:
 
-2. For each row:
+```
+from augment import find_xrd_files, load_csv_numpy, fetch_alpss_metrics
 
-   * Downloads the PDV file from Girder (using the filename and folder ID).
-   * Runs ALPSS on the downloaded PDV file using a provided ALPSS config JSON.
-   * Extracts:
+# Assuming you have an authenticated GirderClient called `client`
 
-     * `velocity-time history`
-     * `Flyer velocity`
-     * `spall strength`
-   * Retrieves **associated EBSD/XRD file links** for that IGSN.
-   * Writes the links into the column:
+# Find XRD files for a sample
+xrd_links = find_xrd_files("JHAMAD00001", client)
 
-     > `Sample microstructure/material characterization (EBSD/XRD images)`
+# Download an XRD CSV as a numeric numpy array
+arr = load_csv_numpy(client, xrd_links["scan_point_0_xrd.csv"])
 
-3. Writes all results into a new Excel file.
+# Fetch ALPSS velocity trace + metrics
+link, velocity, spall = fetch_alpss_metrics(
+    "C1--20250605--00087",
+    ALPSS_FORM_ID,
+    RESULTS_FOLDER_ID,
+    client
+)
 
-Configuration is handled entirely through a `.env` file. Dependencies should be installed using a `requirements.txt` file.
-
----
-
-## Inputs
-
-1. **Input Excel file** (must contain `IGSN` and `PDV_FileName` columns).
-2. **ALPSS configuration JSON** (passed to ALPSS).
-3. **`.env` file** containing:
-
-   ```bash
-   GIRDER_API_URL=...
-   HTMDEC_GIRDER_API_KEY=...
-   GIRDER_FOLDER_ID=...
-   ```
-4. A `requirements.txt` is provided for installing dependencies.
-
----
-
-## Outputs
-
-The output Excel file will contain all original columns plus:
-
-* `velocity-time history`
-* `Flyer velocity`
-* `spall strength`
-* `Sample microstructure/material characterization (EBSD/XRD images)` (comma-separated links)
-
----
-
-## Usage
-
-```bash
-python augment.py \
-    --input-xlsx input.xlsx \
-    --output-xlsx output.xlsx \
-    --alpss-config config.json
 ```
 
----
+### Installation
 
-## Notes
+Install Python dependencies:
 
-* Existing columns with matching names will be overwritten.
-* If a PDV file cannot be found through Girder, the script writes `None` for that experiment.
-* EBSD/XRD links are collected using `get_igsn_xrd_links()` and inserted as a single string.
-* The Girder client is automatically created using `.env` variables.
+``` 
+pip install -r requirements.txt
+```
 
----
+Create a .env file containing:
 
-If you'd like, I can also provide an example `.env`, example Excel input, or a minimal working directory structure.
+GIRDER_API_URL=https://data.htmdec.org/api/v1
+HTMDEC_GIRDER_API_KEY=your_api_key_here
+
+### Usage
+
+Open augment.ipynb to see how each utility works and how to apply them to real data.

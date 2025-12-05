@@ -1,0 +1,6 @@
+pandas
+numpy
+python-dotenv
+girder-client
+openpyxl
+ipykernel
