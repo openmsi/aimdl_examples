@@ -7,7 +7,7 @@ import numpy as np
 # -------------------------------
 # Convert a CSV file from Girder into numeric numpy array
 # -------------------------------
-def download_csv_to_numpy(client, file_link: str) -> np.ndarray:
+def load_csv_numpy(client, file_link: str) -> np.ndarray:
     item_id = file_link.split('/')[-1]
 
     # Get item files
@@ -33,7 +33,10 @@ def download_csv_to_numpy(client, file_link: str) -> np.ndarray:
 
     return numeric_df.to_numpy()
 
-def get_igsn_xrd_links(igsn: str, client):
+# -------------------------------
+# Get all XRD CSV links (Kafka or Dataflow flagged)
+# -------------------------------
+def find_xrd_files(igsn: str, client):
     params = {
         "q": igsn,
         "mode": "igsn",
@@ -53,27 +56,55 @@ def get_igsn_xrd_links(igsn: str, client):
     return links
 
 
-def extract_alpss_from_portal(PDV_FileName, ALPSS_FORM_ID, ALPSS_OUTPUT_FOLDER_ID, client):
+def fetch_alpss_metrics(PDV_FileName, ALPSS_FORM_ID, ALPSS_OUTPUT_FOLDER_ID, client):
+    
+    # 1) FORM EXTRACTION (flyer_velocity, spall_strength)
 
+    print(f"[INFO] Extracting metrics for: {PDV_FileName}")
     # metrics extraction
     query = PDV_FileName
     results = client.get('entry', parameters={'formId': ALPSS_FORM_ID, 'query': PDV_FileName, 'field': 'file_name', 'limit': 100000})
     if len(results) == 0:
-        return None, None, None
-    result = results[0] # TODO: pick the most recent
-
-    flyer_velocity = result['data'].get('velocity_at_max_compression', None)
-    spall_strength = result['data'].get('spall_strength', None)
-
-    # raw file extraction
-    shot_alpss_folder = client.get('folder', parameters={'parentType': 'folder', 'parentId': ALPSS_OUTPUT_FOLDER_ID, 'name': PDV_FileName, 'limit': 100000})
-    items = client.get('item', parameters={'folderId': shot_alpss_folder[0]['_id'], 'text': PDV_FileName})
-    for item in items:
-        if item['meta']['alpss_output_name'] == "smooth_velocity": 
-            velocity_time_history_id = item['_id'] #TODO: Handle not found
-    if velocity_time_history_id:
-        velocity_time_history = f"https://data.htmdec.org/#item/{velocity_time_history_id}"
+        flyer_velocity = None
+        spall_strength = None
     else:
-        velocity_time_history = None
+        result = results[0] # TODO: pick most recent — right now first wins
+        data = result.get("data", {})
+        flyer_velocity = data.get("velocity_at_max_compression")
+        spall_strength = data.get("spall_strength")
 
-    return velocity_time_history, flyer_velocity, spall_strength
+    # 2) FILE EXTRACTION (velocity trace)
+
+    print(f"[INFO] Extracting velocity trace for: {PDV_FileName}")
+    # Find the ALPSS output folder
+    folders = client.get(
+        "folder",
+        parameters={
+            "parentType": "folder",
+            "parentId": ALPSS_OUTPUT_FOLDER_ID,
+            "name": PDV_FileName,
+            "limit": 100000,
+        },
+    )
+
+    if not folders:
+        return None, flyer_velocity, spall_strength
+    
+    folder_id = folders[0]["_id"]
+
+    # Get items under that folder
+    items = client.get("item", parameters={"folderId": folder_id})
+
+    velocity_time_history_id = None
+
+    for item in items:
+        if item.get("meta", {}).get("alpss_output_name") == "smooth_velocity":
+            velocity_time_history_id = item["_id"]
+            break
+
+    if velocity_time_history_id:
+        link = f"https://data.htmdec.org/#item/{velocity_time_history_id}"
+    else:
+        link = None
+
+    return link, flyer_velocity, spall_strength
