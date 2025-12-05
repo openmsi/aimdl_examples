@@ -42,25 +42,13 @@ def get_igsn_xrd_links(igsn: str, client):
     }
 
     resources = client.get("resource/search", parameters=params)
-    links = []
+    links = {}
 
     for resource_type_key, resource_type_list in resources.items():
         for resource in resource_type_list:
             if not resource['name'].endswith('_xrd.csv'):
                 continue
-            metadata = client.get(
-                f"resource/{resource['_id']}",
-                parameters={'type': resource_type_key}
-            )
-
-            meta = metadata.get("meta", {})
-            kafka_ok = meta.get("KafkaTopic") == "aimdl-xrd"
-            dataflow_ok = meta.get("dataflowId") == "6729631c1f198818440f687d"
-
-            link = f"https://data.htmdec.org/#{resource_type_key}/{resource['_id']}"
-            if kafka_ok or dataflow_ok:
-                links.append(link)
-
+            links[resource['name']] = f"https://data.htmdec.org/#{resource_type_key}/{resource['_id']}"
 
     return links
 
