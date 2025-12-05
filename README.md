@@ -5,8 +5,9 @@ You can use these utilities to:
 
 - find all XRD measurement files associated with a sample (through their [IGSN](https://ev.igsn.org/)),
 - download XRD CSVs as clean numeric NumPy arrays through their Girder links,
-- extract ALPSS-generated metrics (flyer velocity, spall strength),
-- and fetch velocity-time history traces through their Girder links.
+- From sample shock experiments:
+   - extract ALPSS-generated metrics (flyer velocity, spall strength),
+   - and fetch velocity-time history traces through their Girder links.
 
 Each function is standalone and can be directly imported into notebooks or scripts.
 
@@ -33,7 +34,7 @@ link, velocity, spall = fetch_alpss_metrics(
 
 ```
 
-### Installation
+## Installation
 
 Install Python dependencies:
 
@@ -46,6 +47,6 @@ Create a .env file containing:
 GIRDER_API_URL=https://data.htmdec.org/api/v1
 HTMDEC_GIRDER_API_KEY=your_api_key_here
 
-### Usage
+## Usage
 
 Open augment.ipynb to see how each utility works and how to apply them to real data.
