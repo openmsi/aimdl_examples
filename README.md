@@ -1,4 +1,4 @@
-## Augmentation Utilities
+## Utilities
 
 This repository provides helper functions for interacting with experimental data stored in Girder.
 You can use these utilities to:
