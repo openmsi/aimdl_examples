@@ -7,6 +7,7 @@ from .download import (
     fetch_and_parse,
     parse_results,
     coerce_types,
+    paginate_datafiles,
 )
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "fetch_and_parse",
     "parse_results",
     "coerce_types",
+    "paginate_datafiles",
 ]

@@ -2,6 +2,7 @@
 
 import io
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import pandas as pd
@@ -22,6 +23,60 @@ def get_girder_client(session=None):
     me = gc.get("user/me")
     assert me is not None, "Failed to authenticate with Girder API"
     return gc
+
+
+def paginate_datafiles(gc, data_type, worker_fn, item_filter=None, max_workers=8, **query_params):
+    """Paginate aimdl/datafiles and fan out worker_fn over a thread pool.
+
+    Args:
+        gc: authenticated GirderClient
+        data_type: str, the dataType query parameter (e.g. "pdv_alpss_result")
+        worker_fn: callable(item) -> result; executed in thread pool
+        item_filter: optional callable(item) -> bool; applied client-side before dispatch
+        max_workers: int, max threads in pool (default 8)
+        **query_params: additional query parameters forwarded to aimdl/datafiles
+
+    Returns:
+        list of results from worker_fn
+    """
+    results = []
+    limit = 50
+    offset = 0
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        while True:
+            batch = gc.get(
+                "aimdl/datafiles",
+                parameters={
+                    "limit": limit,
+                    "offset": offset,
+                    "dataType": data_type,
+                    **query_params,
+                },
+            )
+            if not batch:
+                break
+
+            # Check original batch size before filtering for pagination logic
+            original_batch_size = len(batch)
+
+            if item_filter:
+                batch = [item for item in batch if item_filter(item)]
+
+            futures = [executor.submit(worker_fn, item) for item in batch]
+
+            for future in as_completed(futures):
+                try:
+                    result = future.result()
+                    results.append(result)
+                except Exception as e:
+                    raise RuntimeError(f"Worker failed: {e}") from e
+
+            if original_batch_size < limit:
+                break
+            offset += limit
+
+    return results
 
 
 def download_item_to_disk(gc, item, output_dir):
@@ -67,11 +122,13 @@ def fetch_and_parse(gc, item):
 
 def parse_results(content, item):
     """Parse ALPSS results CSV from Girder item."""
-    data = {
-        k: v.strip()
-        for k, v in (line.decode("utf8").split(",") for line in content.readlines())
-    }
-    data["Date"] = data["Date"] + " " + data.pop("Time")
+    content.seek(0)
+    df = pd.read_csv(content)
+    # Take first row and convert to dict, dropping NaN values
+    data = df.iloc[0].dropna().to_dict()
+    # Merge Date and Time columns if Time exists
+    if "Time" in data:
+        data["Date"] = str(data["Date"]) + " " + str(data.pop("Time"))
     data["igsn"] = item["meta"]["igsn"]
     data["itemId"] = item["_id"]
     return data
@@ -79,8 +136,8 @@ def parse_results(content, item):
 
 def coerce_types(df):
     """Convert ALPSS results DataFrame columns to appropriate types."""
-    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-    df["Run Time"] = pd.to_timedelta(df["Run Time"], errors="coerce")
+    # df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+    # df["Run Time"] = pd.to_timedelta(df["Run Time"], errors="coerce")
     numeric_columns = [
         "Velocity at Max Compression",
         "Time at Max Compression",
@@ -111,8 +168,6 @@ def coerce_types(df):
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
-    for col in ["Velocity OK", "Spall OK", "Uncertainty OK", "HEL Detected"]:
-        if col in df.columns:
-            df[col] = df[col].map({"True": True, "False": False})
+    # Boolean columns are already booleans from pandas read_csv
 
     return df
