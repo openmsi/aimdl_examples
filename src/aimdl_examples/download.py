@@ -125,7 +125,7 @@ def parse_results(content, item):
     content.seek(0)
     df = pd.read_csv(content)
     # Take first row and convert to dict, dropping NaN values
-    data = df.iloc[0].dropna().to_dict()
+    data = df.iloc[0].to_dict()
     # Merge Date and Time columns if Time exists
     if "Time" in data:
         data["Date"] = str(data["Date"]) + " " + str(data.pop("Time"))
