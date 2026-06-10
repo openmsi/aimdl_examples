@@ -25,6 +25,20 @@ def get_girder_client(session=None):
     return gc
 
 
+def get_output_dir(item, base_dir):
+    """Get output directory for item, organized by IGSN if available.
+
+    Args:
+        item: Girder item dict with optional meta.igsn
+        base_dir: base output directory
+
+    Returns:
+        output_dir path, includes IGSN subdirectory if available
+    """
+    igsn = item.get('meta', {}).get('igsn', '')
+    return f"{base_dir}/{igsn}" if igsn else base_dir
+
+
 def paginate_datafiles(gc, data_type, worker_fn, item_filter=None, max_workers=8, **query_params):
     """Paginate aimdl/datafiles and fan out worker_fn over a thread pool.
 
