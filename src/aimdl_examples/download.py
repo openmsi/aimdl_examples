@@ -148,40 +148,42 @@ def parse_results(content, item):
     return data
 
 
+ALPSS_NUMERIC_COLUMNS = [
+    "Velocity at Max Compression",
+    "Time at Max Compression",
+    "Velocity at Max Compression Freq Uncertainty",
+    "Velocity at Max Compression Vel Uncertainty",
+    "Velocity at Max Tension",
+    "Time at Max Tension",
+    "Velocity at Max Tension Freq Uncertainty",
+    "Velocity at Max Tension Vel Uncertainty",
+    "Velocity at Recompression",
+    "Time at Recompression",
+    "Carrier Frequency",
+    "Spall Strength",
+    "Spall Strength Uncertainty",
+    "Strain Rate",
+    "Strain Rate Uncertainty",
+    "Peak Shock Stress",
+    "Spect Time Res",
+    "Spect Freq Res",
+    "Spect Velocity Res",
+    "Signal Start Time",
+    "Smoothing Characteristic Time",
+    "HEL Strength (GPa)",
+    "HEL Uncertainty (GPa)",
+    "HEL Free Surface Velocity (m/s)",
+    "HEL Time Detection (ns)",
+    "HEL Consecutive Points",
+    "HEL Segment Duration (ns)",
+    "HEL Strain Rate",
+]
+
+
 def coerce_types(df):
     """Convert ALPSS results DataFrame columns to appropriate types."""
-    # df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-    # df["Run Time"] = pd.to_timedelta(df["Run Time"], errors="coerce")
-    numeric_columns = [
-        "Velocity at Max Compression",
-        "Time at Max Compression",
-        "Velocity at Max Tension",
-        "Time at Max Tension",
-        "Velocity at Recompression",
-        "Time at Recompression",
-        "Carrier Frequency",
-        "Spall Strength",
-        "Spall Strength Uncertainty",
-        "Strain Rate",
-        "Strain Rate Uncertainty",
-        "Peak Shock Stress",
-        "Spect Time Res",
-        "Spect Freq Res",
-        "Spect Velocity Res",
-        "Signal Start Time",
-        "Smoothing Characteristic Time",
-        "HEL Strength (GPa)",
-        "HEL Uncertainty (GPa)",
-        "HEL Free Surface Velocity (m/s)",
-        "HEL Time Detection (ns)",
-        "HEL Consecutive Points",
-        "HEL Segment Duration (ns)",
-        "HEL Strain Rate",
-    ]
-    for col in numeric_columns:
+    for col in ALPSS_NUMERIC_COLUMNS:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
-
-    # Boolean columns are already booleans from pandas read_csv
 
     return df

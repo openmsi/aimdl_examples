@@ -9,6 +9,7 @@ from .download import (
     coerce_types,
     paginate_datafiles,
     get_output_dir,
+    ALPSS_NUMERIC_COLUMNS,
 )
 
 __all__ = [
