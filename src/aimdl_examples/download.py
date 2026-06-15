@@ -214,3 +214,66 @@ def coerce_types(df):
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
     return df
+
+
+def get_run_metadata(gc, data_type):
+    """Get run metadata from first item (single API call with limit=1)."""
+    batch = gc.get(
+        "aimdl/datafiles",
+        parameters={
+            "limit": 1,
+            "offset": 0,
+            "dataType": data_type,
+            "extraFields" : '["meta.prov", "meta.runId"]'
+
+        },
+    )
+
+    if not batch:
+        return None
+
+    item = batch[0]
+    meta = item.get("meta", {})
+
+    run_id = meta.get("runId")
+    alpss_ver, dagster_ver = None, None
+    if "prov" in meta:
+        alpss_ver, dagster_ver = extract_alpss_versions(
+            meta['prov']['wasGeneratedBy']
+        )
+
+    # Only return None if all three are missing
+    if not any([run_id, alpss_ver, dagster_ver]):
+        return None
+
+    return {
+        "runId": run_id,
+        "alpss_version": alpss_ver,
+        "dagster_version": dagster_ver,
+    }
+
+
+def write_run_metadata(run_id, alpss_version, dagster_version, output_dir):
+    """Write metadata.json with run info to output directory."""
+    import json
+    metadata = {
+        "runId": run_id,
+        "alpss_version": alpss_version,
+        "dagster_version": dagster_version,
+    }
+    filepath = Path(output_dir) / "metadata.json"
+    filepath.parent.mkdir(parents=True, exist_ok=True)
+    with open(filepath, 'w') as f:
+        json.dump(metadata, f, indent=2)
+
+
+def fetch_and_write_run_metadata(gc, data_type, output_dir):
+    """Fetch metadata from first item and write metadata.json to output dir."""
+    metadata = get_run_metadata(gc, data_type)
+    if metadata:
+        write_run_metadata(
+            metadata["runId"],
+            metadata["alpss_version"],
+            metadata["dagster_version"],
+            output_dir
+        )

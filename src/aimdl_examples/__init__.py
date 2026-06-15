@@ -10,6 +10,7 @@ from .download import (
     paginate_datafiles,
     get_output_dir,
     extract_alpss_versions,
+    fetch_and_write_run_metadata,
     ALPSS_NUMERIC_COLUMNS,
 )
 
@@ -23,5 +24,6 @@ __all__ = [
     "paginate_datafiles",
     "get_output_dir",
     "extract_alpss_versions",
+    "fetch_and_write_run_metadata",
     "ALPSS_NUMERIC_COLUMNS",
 ]
