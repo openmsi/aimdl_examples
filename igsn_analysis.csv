@@ -1,5 +1,0 @@
-igsn,has_any_data,has_xrd,xrd_files_count,has_ebsd,ebsd_files_count,has_laser_shock,laser_shock_shots_count,velocity_ok_count,spall_ok_count,hel_detected_count
-JHAMAC00003-S1R4C3,True,True,139,False,0,True,25,25,22,0
-JHAMAC00003-S1R6C3,True,True,41,False,0,True,25,25,7,0
-JHAMAC00003-S4R5C3,True,False,0,False,0,True,25,25,25,0
-JHAMAC00001-S8R3C2,True,False,0,False,0,True,16,16,8,1
