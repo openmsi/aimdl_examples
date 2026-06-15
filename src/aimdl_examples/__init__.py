@@ -9,6 +9,7 @@ from .download import (
     coerce_types,
     paginate_datafiles,
     get_output_dir,
+    extract_alpss_versions,
     ALPSS_NUMERIC_COLUMNS,
 )
 
@@ -21,4 +22,6 @@ __all__ = [
     "coerce_types",
     "paginate_datafiles",
     "get_output_dir",
+    "extract_alpss_versions",
+    "ALPSS_NUMERIC_COLUMNS",
 ]

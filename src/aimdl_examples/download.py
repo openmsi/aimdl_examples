@@ -134,6 +134,24 @@ def fetch_and_parse(gc, item):
     return parse_results(content, item)
 
 
+def extract_alpss_versions(generated_by_str):
+    """Extract alpss and alpss_dagster versions from wasGeneratedBy string.
+
+    Args:
+        generated_by_str: string like "alpss_dagster/0.1.1 alpss/1.7.1"
+
+    Returns:
+        tuple of (alpss_dagster_version, alpss_version) or (None, None)
+    """
+    import re
+    if not generated_by_str:
+        return None, None
+    match = re.search(r'alpss_dagster/([\d.]+)\s+alpss/([\d.]+)', str(generated_by_str))
+    if match:
+        return match.group(1), match.group(2)
+    return None, None
+
+
 def parse_results(content, item):
     """Parse ALPSS results CSV from Girder item."""
     content.seek(0)
@@ -145,6 +163,15 @@ def parse_results(content, item):
         data["Date"] = str(data["Date"]) + " " + str(data.pop("Time"))
     data["igsn"] = item["meta"]["igsn"]
     data["itemId"] = item["_id"]
+
+    # Add provenance metadata
+    data["runId"] = item["meta"]["runId"]
+    dagster_version, alpss_version = extract_alpss_versions(
+        item["meta"]['prov']['wasGeneratedBy']
+    )
+    data["alpss_dagster_version"] = dagster_version
+    data["alpss_version"] = alpss_version
+
     return data
 
 
