@@ -10,7 +10,7 @@ from .download import (
     get_output_dir,
 )
 
-from .alpss import ALPSS_NUMERIC_COLUMNS, coerce_types, extract_alpss_versions, fetch_and_write_run_metadata
+from .alpss import ALPSS_NUMERIC_COLUMNS, coerce_types, extract_alpss_versions, fetch_and_write_run_metadata, enrich_alpss_with_material_properties
 
 __all__ = [
     "get_girder_client",
@@ -23,5 +23,6 @@ __all__ = [
     "get_output_dir",
     "extract_alpss_versions",
     "fetch_and_write_run_metadata",
+    "enrich_alpss_with_material_properties",
     "ALPSS_NUMERIC_COLUMNS",
 ]

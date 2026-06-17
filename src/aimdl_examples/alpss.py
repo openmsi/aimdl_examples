@@ -32,6 +32,7 @@ ALPSS_NUMERIC_COLUMNS = [
     "HEL Strain Rate",
 ]
 
+ALPSS_MATERIAL_PROPS_FORM_ID = '6a0d9fb2f35ea45f3d915850'
 
 def coerce_types(df):
     """Convert ALPSS results DataFrame columns to appropriate types."""
@@ -120,3 +121,54 @@ def fetch_and_write_run_metadata(gc, data_type, output_dir):
             metadata["dagster_version"],
             output_dir
         )
+
+
+
+def enrich_alpss_with_material_properties(df, gc, igsn_column='igsn'):
+    """Fetch material properties from entry form and add to ALPSS DataFrame.
+
+    Queries the /entry endpoint for the given form_id, extracts c0, c_l, density
+    from the first measurement in each entry, and adds them as new columns.
+    Missing entries result in NaN values.
+
+    Args:
+        df: DataFrame with ALPSS results
+        gc: authenticated Girder client
+        form_id: Girder form ID for material properties (e.g., '6a0d9fb2f35ea45f3d915850')
+        igsn_column: name of IGSN column in df (default 'igsn')
+
+    Returns:
+        DataFrame with material_c0, material_c_l, material_density columns added
+    """
+    df = df.copy()
+
+    # Fetch all entries for this form
+    entries = gc.get('entry', parameters={'formId': ALPSS_MATERIAL_PROPS_FORM_ID})
+
+    # Build dict mapping IGSN -> entry
+    entries_by_igsn = {}
+    for entry in entries:
+        
+        igsn = entry.get('data', {}).get('IGSN')
+        if igsn:
+            entries_by_igsn[igsn] = entry
+
+    # Initialize columns with NaN
+    df['material_c0'] = pd.NA
+    df['material_c_l'] = pd.NA
+    df['material_density'] = pd.NA
+
+    # Fill in values from entries
+    for idx, row in df.iterrows():
+        igsn = row[igsn_column]
+        base_igsn = igsn.split('-')[0] if igsn else None                                                                                
+        entry = entries_by_igsn.get(base_igsn)
+        if entry is not None:
+            measurements = entry.get('data', {}).get('measurements', [])
+            if measurements and len(measurements) > 0:
+                meas = measurements[0]
+                df.at[idx, 'material_c0'] = meas.get('c0')
+                df.at[idx, 'material_c_l'] = meas.get('c_l')
+                df.at[idx, 'material_density'] = meas.get('density')
+
+    return df
