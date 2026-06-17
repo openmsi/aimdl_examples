@@ -154,6 +154,8 @@ def enrich_alpss_with_material_properties(df, gc, igsn_column='igsn'):
             entries_by_igsn[igsn] = entry
 
     # Initialize columns with NaN
+    df['material_type'] = pd.NA
+    df['material_thickness'] = pd.NA
     df['material_c0'] = pd.NA
     df['material_c_l'] = pd.NA
     df['material_density'] = pd.NA
@@ -161,10 +163,14 @@ def enrich_alpss_with_material_properties(df, gc, igsn_column='igsn'):
     # Fill in values from entries
     for idx, row in df.iterrows():
         igsn = row[igsn_column]
-        base_igsn = igsn.split('-')[0] if igsn else None                                                                                
+        base_igsn = igsn.split('-')[0] if igsn else None
         entry = entries_by_igsn.get(base_igsn)
         if entry is not None:
-            measurements = entry.get('data', {}).get('measurements', [])
+            data = entry.get('data', {})
+            df.at[idx, 'material_type'] = data.get('materialType')
+            df.at[idx, 'material_thickness'] = data.get('materialThickness')
+
+            measurements = data.get('measurements', [])
             if measurements and len(measurements) > 0:
                 meas = measurements[0]
                 df.at[idx, 'material_c0'] = meas.get('c0')
