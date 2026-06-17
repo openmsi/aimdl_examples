@@ -82,7 +82,7 @@ def get_run_metadata(gc, data_type):
     run_id = meta.get("runId")
     alpss_ver, dagster_ver = None, None
     if "prov" in meta:
-        dagster_ver, alpss_ver = extract_alpss_versions(
+        alpss_ver, dagster_ver = extract_alpss_versions(
             meta['prov']['wasGeneratedBy']
         )
 
