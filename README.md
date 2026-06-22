@@ -9,11 +9,13 @@ This repository provides utilities for downloading and processing experimental d
 - **`all_maxima/`** — XRD diffraction data (MAXIMA)
   - `data_download.ipynb` — Download raw XRD and derived processed files (e.g., intensity curves and scan images)
 
-- **`tutorials/`** — Learning notebooks for the `aimdl/` API and data analysis
+- **`tutorials/`** — Learning notebooks for the `aimdl/` API, library and analysis examples
   - `01_api_endpoints.ipynb` — Raw coverage of all five `aimdl/` REST endpoints
-  - `02_api_walkthrough.ipynb` — Guided tour of the `aimdl_examples` library (auth, pagination, downloads, parsing)
-  - `03_alpss_analysis.ipynb` — Visualizations of ALPSS results (quality rates, velocity distributions, per-sample comparisons)
-  - `04_xrd_visualization.ipynb` — 2theta vs. intensity plots for a chosen sample (IGSN)
+  - `02_library_guide.ipynb` — Guided tour of the `aimdl_examples` library (auth, pagination, downloads, parsing)
+  - `03_multimodal_sample_discovery.ipynb` — Find samples with multiple data types using partition queries
+  - **`analysis/`** — Example analyses and visualizations
+    - `01_alpss_analysis.ipynb` — Visualizations of ALPSS results (quality rates, velocity distributions, per-sample comparisons)
+    - `02_xrd_visualization.ipynb` — 2theta vs. intensity plots for a chosen sample (IGSN)
 
 ## Installation
 
