@@ -3,3 +3,4 @@ numpy
 python-dotenv
 girder-client
 ipykernel
+matplotlib
