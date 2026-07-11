@@ -63,23 +63,95 @@ def test_poll_trigger_commit_is_separate_so_failed_sync_retries():
 
 
 # ------------------------------------------------------------------------------ sync
+#
+# sync now pulls the partition?since= delta (partition_igsns -> igsn_items) instead of a
+# newest-first walk, so these monkeypatch those two network seams plus _utcnow_iso.
 
-def test_sync_ingests_oldest_first_and_is_idempotent(monkeypatch):
-    # fetch_new_items returns newest-first with stop-on-seen, like the real walk
-    items = [{"_id": "newer"}, {"_id": "older"}]
-    monkeypatch.setattr(live, "fetch_new_items",
-                        lambda gc, cfg, seen: [i for i in items if i["_id"] not in seen])
+def _item(item_id, created):
+    return {"_id": item_id, "created": created}
+
+
+def test_sync_ingests_delta_oldest_first_and_dedups(monkeypatch):
+    # one changed IGSN; its items come back newest-first, like the real listing
+    items = [_item("newer", "2026-02-05T02:00:00+00:00"),
+             _item("older", "2026-02-05T01:00:00+00:00")]
+    monkeypatch.setattr(live, "partition_igsns", lambda gc, cfg, since: {"IG1"})
+    monkeypatch.setattr(live, "igsn_items", lambda gc, cfg, igsn: items)
+    monkeypatch.setattr(live, "parse_many",
+                        lambda gc, batch, workers: [_row(i["_id"]) for i in batch])
+    monkeypatch.setattr(live, "_utcnow_iso", lambda: "MARK")
+
+    store = Store()
+    assert sync(None, store, Config()) == (2, 0, 0)
+    assert store.since == "MARK"                # watermark advanced past this sync
+
+    seq = {r["itemId"]: r["arrival_seq"] for r in store.rows}
+    assert seq["older"] < seq["newer"]          # oldest-first by server `created`
+
+    assert sync(None, store, Config()) == (0, 0, 0)   # itemId dedup: repeat is a no-op
+    assert len(store.rows) == 2
+
+
+def test_sync_downloads_only_unseen_items(monkeypatch):
+    # igsn_items lists a sample's whole history; only the unseen row is downloaded/parsed
+    items = [_item("seen1", "2026-02-05T01:00:00+00:00"),
+             _item("fresh", "2026-02-05T02:00:00+00:00")]
+    monkeypatch.setattr(live, "partition_igsns", lambda gc, cfg, since: {"IG1"})
+    monkeypatch.setattr(live, "igsn_items", lambda gc, cfg, igsn: items)
+    downloaded = []
+
+    def fake_parse(gc, batch, workers):
+        downloaded.extend(i["_id"] for i in batch)
+        return [_row(i["_id"]) for i in batch]
+
+    monkeypatch.setattr(live, "parse_many", fake_parse)
+    monkeypatch.setattr(live, "_utcnow_iso", lambda: "MARK")
+
+    store = Store(seen={"seen1"})
+    assert sync(None, store, Config())[0] == 1
+    assert downloaded == ["fresh"]              # the already-seen item is never re-fetched
+
+
+def test_sync_watermark_holds_on_failure_then_recovers(monkeypatch):
+    queried = []
+    calls = {"n": 0}
+
+    def flaky_partition(gc, cfg, since):
+        queried.append(since)
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise RuntimeError("network down")
+        return {"IG1"}
+
+    monkeypatch.setattr(live, "partition_igsns", flaky_partition)
+    monkeypatch.setattr(live, "igsn_items",
+                        lambda gc, cfg, igsn: [_item("r", "2026-02-05T01:00:00+00:00")])
+    monkeypatch.setattr(live, "parse_many",
+                        lambda gc, batch, workers: [_row(i["_id"]) for i in batch])
+    monkeypatch.setattr(live, "_utcnow_iso", lambda: "MARK")
+
+    store = Store(since="T0")
+    with pytest.raises(RuntimeError):
+        sync(None, store, Config())
+    assert store.since == "T0"                  # not advanced: the missed window retries
+
+    assert sync(None, store, Config()) == (1, 0, 0)   # recovered on the next sync
+    assert queried == ["T0", "T0"]              # re-queried the same window; no gap
+    assert store.since == "MARK"
+
+
+def test_seed_store_sets_watermark_to_bound_live_sync(monkeypatch):
+    # one page covers the (single) required IGSN, then empty -> seed stops and marks the
+    # watermark, so the first live sync pulls only partitions updated after the seed.
+    monkeypatch.setattr(live, "_utcnow_iso", lambda: "SEED-MARK")
+    monkeypatch.setattr(live, "page_items",
+                        lambda gc, cfg, offset: [{"_id": "a"}] if offset == 0 else [])
     monkeypatch.setattr(live, "parse_many",
                         lambda gc, batch, workers: [_row(i["_id"]) for i in batch])
 
     store = Store()
-    assert sync(None, store, Config()) == (2, 0, 0)
-
-    seq = {r["itemId"]: r["arrival_seq"] for r in store.rows}
-    assert seq["older"] < seq["newer"]          # arrival_seq ascends with shot order
-
-    assert sync(None, store, Config()) == (0, 0, 0)   # itemId dedup: repeat is a no-op
-    assert len(store.rows) == 2
+    live.seed_store(None, store, Config(seed_igsns=1), log=lambda *_: None)
+    assert store.since == "SEED-MARK"
 
 
 # ----------------------------------------------------------------------------- store

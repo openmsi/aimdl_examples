@@ -314,8 +314,15 @@ between steps.
   *Done when:* live updates repaint in place (no PNG swap); visual check of boxes + points.
   Commit `build(S2): incremental render via Bokeh`.
 
-- [ ] **S3 — `partition?since=` in `sync`.**
-  Files: `live.py`. Replace `count` + newest-first walk with the delta query.
+- [x] **S3 — `partition?since=` in `sync`.**
+  Files: `live.py`. Replace `count` + newest-first walk with the delta query. `sync` now
+  pulls the changed-partition delta (`partition_igsns` → per-IGSN `igsn_items` via the
+  server-side `meta.igsn` filter), keeps only rows not in `store.seen`, and ingests
+  oldest-first by server `created`. The watermark lives on `Store.since` (set by
+  `seed_store`, advanced by `sync` to a time captured *before* the query, only on a clean
+  pass) so a raised fetch re-queries the same window. `fetch_new_items` removed; the
+  count trigger (`PollTrigger`/`poll_count`) is kept as an interim cheap gate and is
+  retired with the trigger-seam rework in S4/S5, so the notebook is untouched here.
   *Done when:* new results appear; a forced-missed interval is recovered on the next
   `sync`; `itemId` dedup holds. Commit `build(S3): partition?since= delta in sync`.
 

@@ -19,7 +19,9 @@ rest stayed unseen, every poll would re-walk and re-download them.
 from __future__ import annotations
 
 import io
+import json
 import math
+from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Callable, Iterable, NamedTuple
@@ -35,7 +37,8 @@ from .download import get_item_to_memory
 __all__ = [
     "VELOCITY", "SPALL", "METRICS", "TIMEFRAMES", "UNKNOWN", "SKIP",
     "Config", "PollTrigger", "Store", "View",
-    "parse_experiment_ts", "poll_count", "page_items", "fetch_new_items",
+    "parse_experiment_ts", "poll_count", "page_items",
+    "partition_igsns", "igsn_items",
     "parse_row", "parse_many", "build_material_map", "material_for", "seed_store",
     "sync",
     "build_view", "new_item_ids", "material_colors", "stable_ylim",
@@ -96,6 +99,15 @@ class Config:
 
 # ----------------------------------------------------------------------------- fetch
 
+def _utcnow_iso() -> str:
+    """Wall-clock UTC as an ISO-8601 string, for the ``sync`` watermark.
+
+    A module function (not an inline ``datetime.now``) so tests can pin it -- the same
+    reason the network calls are separate seams.
+    """
+    return datetime.now(timezone.utc).isoformat()
+
+
 def parse_experiment_ts(value) -> pd.Timestamp:
     """``meta.experiment_date`` -> tz-aware UTC Timestamp (``NaT`` if absent).
 
@@ -137,32 +149,48 @@ class PollTrigger:
         self.last = count
 
 
-def page_items(gc, cfg: Config, offset: int, limit: int = 50) -> list[dict]:
-    return gc.get("aimdl/datafiles", parameters={
+def page_items(gc, cfg: Config, offset: int, limit: int = 50,
+               filters: dict | None = None) -> list[dict]:
+    params = {
         "dataType": cfg.data_type, "limit": limit, "offset": offset,
         "sort": "created", "sortdir": -1,
         "extraFields": '["meta.experiment_date"]',
-    })
+    }
+    if filters:
+        params["filters"] = json.dumps(filters)  # server-side, e.g. {"meta.igsn": igsn}
+    return gc.get("aimdl/datafiles", parameters=params)
 
 
-def fetch_new_items(gc, cfg: Config, seen_ids: set[str]) -> list[dict]:
-    """Walk newest-first, stop at the first already-examined item. Newest-first order.
+def partition_igsns(gc, cfg: Config, since: str | None) -> set[str]:
+    """The changed-partition delta: base IGSN of every partition updated since ``since``.
 
-    ``aimdl/datafiles`` has no ``since`` parameter (only ``aimdl/partition`` does), and
-    ``created`` is server-assigned at ingest, so newest-first plus stop-on-seen *is* the
-    incremental fetch. This is why :func:`aimdl_examples.paginate_datafiles` is not
-    reused: it walks every item and issues one GET per result.
+    ``aimdl/partition`` returns ``{"IGSN//Date": checksum}`` and, given ``since`` (an
+    ISO-8601 UTC string), keeps only partitions the server (re)computed after it -- so
+    this is the change-detector *and* the fetch scope in one request, replacing the old
+    ``count`` poll plus newest-first walk. ``since=None`` returns every partition (a full
+    reconciliation). We need only the IGSN before ``//``; :func:`igsn_items` pulls that
+    sample's rows.
+    """
+    params = {"dataType": cfg.data_type}
+    if since is not None:
+        params["since"] = since
+    partitions = gc.get("aimdl/partition", parameters=params)
+    return {key.split("//")[0] for key in partitions}
+
+
+def igsn_items(gc, cfg: Config, igsn: str) -> list[dict]:
+    """Every ``cfg.data_type`` item for one IGSN, via the server-side ``meta.igsn`` filter.
+
+    A changed partition names an IGSN, not an item; this lists that sample's items so the
+    caller can keep the ones it has not already seen. Newest-first, paged like the walk.
     """
     out: list[dict] = []
     offset = 0
     while True:
-        batch = page_items(gc, cfg, offset)
+        batch = page_items(gc, cfg, offset, filters={"meta.igsn": igsn})
         if not batch:
             return out
-        for item in batch:
-            if item["_id"] in seen_ids:
-                return out
-            out.append(item)
+        out += batch
         if len(batch) < 50:
             return out
         offset += 50
@@ -234,6 +262,9 @@ class Store:
     rows: list[dict] = field(default_factory=list)
     seen: set[str] = field(default_factory=set)
     seq: int = 0
+    #: ``sync`` watermark: pull only partitions updated after this ISO-8601 UTC string.
+    #: ``None`` means "everything so far" -- ``seed_store`` sets it once the seed is in.
+    since: str | None = None
     _rng: np.random.Generator = field(default_factory=lambda: np.random.default_rng(10))
 
     def _admit(self, row: dict) -> None:
@@ -309,20 +340,35 @@ def seed_store(gc, store: Store, cfg: Config,
 
     added, skipped, errors = store.ingest(list(reversed(items)), list(reversed(results)))
     log(f"  ingested +{added} | {skipped} without any metric | {errors} errors")
+    # From here the live path tracks forward: only partitions updated after the seed.
+    store.since = _utcnow_iso()
     return scanned
 
 
 def sync(gc, store: Store, cfg: Config) -> tuple[int, int, int]:
-    """The fetch seam: catch up on everything the store has not seen, parse, ingest.
+    """The fetch seam: pull everything changed since ``store.since``, parse, ingest.
 
-    -> ``(added, skipped, errors)``. The watermark is ``store.seen`` (newest-first walk
-    with stop-on-seen); ingestion goes oldest-first so ``arrival_seq`` ascends with shot
-    order. Idempotent via ``itemId`` dedup in :meth:`Store.ingest`, so callers may
-    invoke it on any trigger -- poll, reconnect, or heartbeat -- without double-adding.
+    -> ``(added, skipped, errors)``. The delta is the set of IGSNs with a partition the
+    server updated after ``store.since`` (:func:`partition_igsns`); for each we list its
+    items (:func:`igsn_items`), drop those already in ``store.seen`` so nothing is
+    re-downloaded, then download+``parse_row``+ingest oldest-first (by server ``created``)
+    so ``arrival_seq`` ascends with shot order.
+
+    The watermark advances to a time captured *before* the query, and only after a clean
+    pass: a raised fetch leaves ``store.since`` put, so the next ``sync`` re-queries the
+    same window and recovers the missed interval. Idempotent via ``itemId`` dedup in
+    :meth:`Store.ingest`, so any trigger -- poll, reconnect, heartbeat -- may call it, and
+    the overlap a rewound watermark re-lists ingests as no-ops.
     """
-    items = list(reversed(fetch_new_items(gc, cfg, store.seen)))
+    before = _utcnow_iso()
+    items: list[dict] = []
+    for igsn in partition_igsns(gc, cfg, store.since):
+        items += [it for it in igsn_items(gc, cfg, igsn) if it["_id"] not in store.seen]
+    items.sort(key=lambda it: it.get("created", ""))   # ISO strings sort chronologically
     results = parse_many(gc, items, cfg.max_workers)
-    return store.ingest(items, results)
+    outcome = store.ingest(items, results)
+    store.since = before
+    return outcome
 
 
 # ------------------------------------------------------------------------------ view
