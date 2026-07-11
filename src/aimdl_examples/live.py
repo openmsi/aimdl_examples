@@ -21,6 +21,7 @@ from __future__ import annotations
 import io
 import json
 import math
+import threading
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
@@ -40,7 +41,7 @@ __all__ = [
     "parse_experiment_ts", "poll_count", "page_items",
     "partition_igsns", "igsn_items",
     "parse_row", "parse_many", "build_material_map", "material_for", "seed_store",
-    "sync",
+    "sync", "row_from_notification", "GirderWebSocketSource", "GIRDER_WS_URL",
     "build_view", "new_item_ids", "material_colors", "stable_ylim",
     "box_glyph_data", "point_glyph_data", "build_bokeh_figure", "update_bokeh",
 ]
@@ -369,6 +370,167 @@ def sync(gc, store: Store, cfg: Config) -> tuple[int, int, int]:
     outcome = store.ingest(items, results)
     store.since = before
     return outcome
+
+
+# ---------------------------------------------------------------------- push trigger
+#
+# The live path (§4-§8): a Girder WebSocket announces the *whole* result row, so a live
+# tick builds a plot row straight from the message -- zero fetch. Correctness never rests
+# on the socket (§8): every (re)connect backfills via `sync(since)` and a slow heartbeat
+# `sync` is a safety net, so a dropped or duplicated announcement is reconciled by REST.
+# The socket replaces only the *trigger*; `sync` and the render path carry over unchanged.
+
+GIRDER_WS_URL = "wss://girder.htmdec.org/notifications/public"
+
+
+def row_from_notification(data: dict, received=None) -> dict | object:
+    """A `pdv_alpss_result` announcement's `data` -> a Store row, or :data:`SKIP`.
+
+    The live counterpart to :func:`parse_row`: the same ``METRICS``/scale loop, but reading
+    the metric fields out of the notification dict instead of a downloaded CSV (§6: the keys
+    in ``data`` are exactly ``spec["src"]``). No download, no CSV read.
+
+    Two alignments keep live and REST rows consistent by construction (§4):
+
+    - ``experiment_ts`` comes from ``data["experiment_date"]`` -- the same value the producer
+      writes to ``meta.experiment_date`` -- never from the fuller shot time in ``File Name``,
+      which would diverge from the day-granular metadata and desync the two paths.
+    - ``itemId`` == the REST item ``_id``, so a result seen first over the socket and later in
+      a backfill ``sync`` (or vice versa) dedups to one row via :meth:`Store.seen`.
+
+    ``created`` is client receipt time -- the socket carries no Girder ingest time, and
+    ``created`` is only an ordering tiebreaker. ``arrival_seq``/``_jit`` are stamped by
+    :meth:`Store._admit` at ingest, exactly as on the REST path. Returns :data:`SKIP` when no
+    metric is reported (mirrors :func:`parse_row`), so an all-``NaN`` announcement -- e.g. a
+    failed shot, still announced (§8) -- is not admitted. Bare ``NaN`` in the JSON survives
+    ``json.loads`` as ``float('nan')`` and reads here as "no value" (§5).
+    """
+    row = {
+        "itemId": data["itemId"],
+        "igsn": data.get("igsn"),
+        "created": received if received is not None else pd.Timestamp.now(tz="UTC"),
+        "experiment_ts": parse_experiment_ts(data.get("experiment_date")),
+    }
+    reported_any = False
+    for name, spec in METRICS.items():
+        value = pd.to_numeric(data.get(spec["src"]), errors="coerce")
+        row[name] = float(value) * spec["scale"] if pd.notna(value) else np.nan
+        reported_any |= pd.notna(value)
+    return row if reported_any else SKIP
+
+
+class GirderWebSocketSource:
+    """The trigger seam, push flavor: subscribe to Girder and ingest live rows with zero fetch.
+
+    Reads the public firehose ``wss://girder.htmdec.org/notifications/public``, keeps only
+    ``msg["type"] == cfg.data_type``, and admits :func:`row_from_notification` of each -- no
+    download. Every (re)connect runs :func:`sync` to backfill anything missed while
+    disconnected (subsumes seed-on-start), and a slow ``heartbeat_seconds`` ``sync`` is a
+    safety net for lost announcements. All ``store`` mutation goes through :attr:`lock`, so
+    the socket thread, the heartbeat thread, and any external poll loop sharing the lock stay
+    single-threaded over the store (§8).
+
+    The pure/reconciling parts -- :meth:`handle_raw` and :meth:`backfill` -- are exercised
+    offline; the socket IO (:meth:`start`) needs a live server and the ``websocket-client``
+    package, imported lazily so this module imports (and its offline tests run) without it.
+    """
+
+    def __init__(self, gc, store: Store, cfg: Config,
+                 render: Callable[[str], None] = lambda _msg: None, *,
+                 url: str = GIRDER_WS_URL, heartbeat_seconds: int = 90,
+                 reconnect_seconds: int = 5):
+        self.gc = gc
+        self.store = store
+        self.cfg = cfg
+        self.render = render
+        self.url = url
+        self.heartbeat_seconds = heartbeat_seconds
+        self.reconnect_seconds = reconnect_seconds
+        self.lock = threading.Lock()
+        self._stop = threading.Event()
+        self._ws = None
+        self._threads: list[threading.Thread] = []
+
+    # -- reconciling core (offline-testable; no socket) --
+
+    def handle_raw(self, raw: str) -> int | None:
+        """Parse one ws frame; ingest it if it is ours. -> rows added, or ``None`` if filtered.
+
+        Best-effort delivery, exactly-correct state (§8): a repeat or unrelated-edit
+        announcement (the ``item.updated`` trigger re-emits on any metadata change) ingests as
+        a no-op via ``itemId`` dedup. Ingestion is first-wins, matching the REST path.
+        """
+        msg = json.loads(raw)
+        if msg.get("type") != self.cfg.data_type:
+            return None
+        with self.lock:
+            return self.store.add([row_from_notification(msg["data"])])
+
+    def backfill(self) -> tuple[int, int, int]:
+        """`sync(since)` under the lock: the reconnect/heartbeat catch-up. Idempotent."""
+        with self.lock:
+            return sync(self.gc, self.store, self.cfg)
+
+    # -- socket IO (live only) --
+
+    def _on_open(self, ws) -> None:
+        # Auth first (§5): reuse the GirderClient's token, no separate exchange.
+        ws.send(json.dumps({"type": "auth", "token": getattr(self.gc, "token", None)}))
+        try:
+            added, _skipped, _errors = self.backfill()   # catch up on the disconnected gap
+        except Exception as exc:  # noqa: BLE001 - a failed backfill must not kill the socket
+            self.render(f"connect backfill error: {type(exc).__name__}: {exc}")
+            return
+        self.render(f"connected -- backfilled +{added}")
+
+    def _on_message(self, ws, raw) -> None:
+        try:
+            added = self.handle_raw(raw)
+        except Exception as exc:  # noqa: BLE001 - one bad frame must not kill the socket
+            self.render(f"ws message error: {type(exc).__name__}: {exc}")
+            return
+        if added:
+            self.render(f"live +{added}")
+
+    def _on_error(self, ws, err) -> None:
+        self.render(f"ws error: {err}")
+
+    def _run_ws(self) -> None:
+        import websocket  # websocket-client; lazy so the module imports without it
+
+        self._ws = websocket.WebSocketApp(
+            self.url, on_open=self._on_open, on_message=self._on_message,
+            on_error=self._on_error,
+        )
+        while not self._stop.is_set():
+            self._ws.run_forever()          # blocks until the connection drops
+            if self._stop.wait(self.reconnect_seconds):
+                break                       # stop() requested during the backoff
+            # loop -> reconnect; the fresh run_forever fires on_open, which backfills the gap
+
+    def _run_heartbeat(self) -> None:
+        while not self._stop.wait(self.heartbeat_seconds):
+            try:
+                added, _skipped, _errors = self.backfill()
+            except Exception as exc:  # noqa: BLE001 - a flaky heartbeat retries next tick
+                self.render(f"heartbeat error: {type(exc).__name__}: {exc}")
+                continue
+            if added:
+                self.render(f"heartbeat backfill +{added}")
+
+    def start(self) -> "GirderWebSocketSource":
+        """Launch the socket + heartbeat in daemon threads. Returns self."""
+        self._stop.clear()
+        self._threads = [threading.Thread(target=target, daemon=True)
+                         for target in (self._run_ws, self._run_heartbeat)]
+        for thread in self._threads:
+            thread.start()
+        return self
+
+    def stop(self) -> None:
+        self._stop.set()
+        if self._ws is not None:
+            self._ws.close()
 
 
 # ------------------------------------------------------------------------------ view

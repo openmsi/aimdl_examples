@@ -326,10 +326,17 @@ between steps.
   *Done when:* new results appear; a forced-missed interval is recovered on the next
   `sync`; `itemId` dedup holds. Commit `build(S3): partition?since= delta in sync`.
 
-- [ ] **S4 — `GirderWebSocketSource` + `row_from_notification`.**
-  Files: `live.py`, notebook. Connect to `wss://girder.htmdec.org/notifications/public`,
-  auth with `gc.token`, filter `type == "pdv_alpss_result"`, build rows with zero fetch;
-  wire connect/reconnect backfill and the fallback heartbeat.
+- [x] **S4 — `GirderWebSocketSource` + `row_from_notification`.**
+  Files: `live.py`, notebook. `row_from_notification(data)` builds a `Store` row straight
+  from an announcement — same `METRICS`/scale loop as `parse_row`, `experiment_ts` from
+  `data["experiment_date"]` (not `File Name`), `SKIP` when no metric is reported; zero fetch.
+  `GirderWebSocketSource` reads the public firehose, auths with `gc.token`, keeps
+  `type == "pdv_alpss_result"`, and admits each row under a lock; every (re)connect and a
+  slow heartbeat run `sync` to backfill. The reconciling core (`handle_raw` / `backfill`) is
+  unit-tested offline; socket IO is lazy-imported so the module and tests need no
+  `websocket-client`. The notebook starts the source as the live trigger and runs the
+  existing poll's `sync` under the source's lock (the fast poll is retired to the heartbeat
+  in S5).
   *Done when:* the §9 manual metadata-edit trigger renders within ~1–2 s; reconnecting after
   a kill backfills the gap; a result seen over the socket then again via `sync` is admitted
   once. Commit `build(S4): GirderWebSocketSource + row_from_notification`.

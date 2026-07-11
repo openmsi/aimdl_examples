@@ -6,14 +6,16 @@ the §12 S2 pure render helpers (``box_glyph_data`` / ``point_glyph_data``) that
 incremental Bokeh figure.
 """
 
+import json
+
 import numpy as np
 import pandas as pd
 import pytest
 
 from aimdl_examples import live
 from aimdl_examples.live import (
-    SKIP, VELOCITY, Config, PollTrigger, Store, View,
-    box_glyph_data, point_glyph_data, sync,
+    SKIP, SPALL, VELOCITY, Config, GirderWebSocketSource, PollTrigger, Store, View,
+    box_glyph_data, point_glyph_data, row_from_notification, sync,
 )
 
 
@@ -152,6 +154,93 @@ def test_seed_store_sets_watermark_to_bound_live_sync(monkeypatch):
     store = Store()
     live.seed_store(None, store, Config(seed_igsns=1), log=lambda *_: None)
     assert store.since == "SEED-MARK"
+
+
+# ------------------------------------------------------- push trigger / live path (S4)
+#
+# The socket path is zero-fetch: row_from_notification builds a plot row straight from the
+# announcement's `data`, and GirderWebSocketSource.handle_raw ingests it under `itemId`
+# dedup. These exercise the reconciling core with no live server (the socket IO is not
+# unit-tested); a raw string mirrors what json.loads sees off the wire, bare NaN included.
+
+def _notification(item_id="6a5101df6d1201b93e76daf8", *, velocity=6.4599,
+                  experiment_date="2026-02-05", igsn="JHAMAC00003-S7R5C3",
+                  extra=""):
+    """A `pdv_alpss_result` frame as a JSON *string*, like the socket delivers (§6)."""
+    fields = [
+        f'"itemId": "{item_id}"',
+        f'"experiment_date": "{experiment_date}"',
+        f'"igsn": "{igsn}"',
+        f'"Velocity at Max Compression": {velocity}',
+        # File Name carries the fuller shot time; row_from_notification must ignore it (§4)
+        f'"File Name": "{igsn}_2026-02-05_21-08-12_shot02_ch1.csv"',
+    ]
+    return '{"type": "pdv_alpss_result", "data": {' + ", ".join(fields) + extra + "}}"
+
+
+def test_row_from_notification_builds_row_from_data_not_download():
+    data = json.loads(_notification())["data"]
+    row = row_from_notification(data, received=pd.Timestamp("2026-06-11", tz="UTC"))
+
+    assert row["itemId"] == "6a5101df6d1201b93e76daf8"
+    assert row["igsn"] == "JHAMAC00003-S7R5C3"
+    assert row[VELOCITY] == 6.4599              # same METRICS["src"] loop as parse_row
+    assert row["created"] == pd.Timestamp("2026-06-11", tz="UTC")   # client receipt time
+
+
+def test_row_from_notification_uses_experiment_date_not_filename():
+    # experiment_ts must equal parse_experiment_ts(experiment_date), NOT the fuller shot
+    # time in File Name (21-08-12) -- else live rows desync from day-granular REST rows (§4).
+    data = json.loads(_notification(experiment_date="2026-02-05"))["data"]
+    row = row_from_notification(data)
+    assert row["experiment_ts"] == live.parse_experiment_ts("2026-02-05")
+    assert row["experiment_ts"] == pd.Timestamp("2026-02-05", tz="UTC")
+
+
+def test_row_from_notification_scales_spall_like_parse_row():
+    data = json.loads(_notification(extra=', "Spall Strength": 3.2e9'))["data"]
+    row = row_from_notification(data)
+    assert row[SPALL] == pytest.approx(3.2)     # ×1e-9, matching METRICS[SPALL]["scale"]
+
+
+def test_row_from_notification_skips_when_no_metric_reported():
+    # a failed shot is announced too (§8); bare NaN survives json.loads as float('nan') and
+    # reads as "no value", so an all-NaN announcement is SKIP -- not admitted to the plot
+    data = json.loads(_notification(velocity="NaN"))["data"]
+    assert row_from_notification(data) is SKIP
+
+
+def test_handle_raw_ingests_matching_and_filters_others():
+    store = Store()
+    src = GirderWebSocketSource(gc=None, store=store, cfg=Config())
+
+    assert src.handle_raw(_notification(item_id="A")) == 1
+    assert [r["itemId"] for r in store.rows] == ["A"]
+
+    # firehose noise: a different type is dropped, nothing ingested
+    assert src.handle_raw('{"type": "something_else", "data": {}}') is None
+    assert len(store.rows) == 1
+
+    # repeat announcement (item.updated re-emits) dedups by itemId -> no-op
+    assert src.handle_raw(_notification(item_id="A")) == 0
+    assert len(store.rows) == 1
+
+
+def test_socket_then_sync_admits_item_once(monkeypatch):
+    # a result seen first over the socket, then again in a backfill sync, is admitted once
+    store = Store()
+    src = GirderWebSocketSource(gc=None, store=store, cfg=Config())
+    assert src.handle_raw(_notification(item_id="dup")) == 1
+
+    monkeypatch.setattr(live, "partition_igsns", lambda gc, cfg, since: {"IG1"})
+    monkeypatch.setattr(live, "igsn_items",
+                        lambda gc, cfg, igsn: [_item("dup", "2026-02-05T01:00:00+00:00")])
+    monkeypatch.setattr(live, "parse_many",
+                        lambda gc, batch, workers: [_row(i["_id"]) for i in batch])
+    monkeypatch.setattr(live, "_utcnow_iso", lambda: "MARK")
+
+    assert src.backfill() == (0, 0, 0)          # itemId already seen -> not re-downloaded
+    assert len(store.rows) == 1
 
 
 # ----------------------------------------------------------------------------- store
