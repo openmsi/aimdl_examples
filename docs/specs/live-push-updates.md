@@ -341,7 +341,12 @@ between steps.
   a kill backfills the gap; a result seen over the socket then again via `sync` is admitted
   once. Commit `build(S4): GirderWebSocketSource + row_from_notification`.
 
-- [ ] **S5 — Push primary, poll → heartbeat; end-to-end.**
-  Files: notebook. Reduce polling to the slow fallback heartbeat.
+- [x] **S5 — Push primary, poll → heartbeat; end-to-end.**
+  Files: notebook. The fast async REST poll loop (`PollTrigger`/`poll_count` + `run()`/`tick()`)
+  is retired: in live mode `GirderWebSocketSource` is the sole trigger, and its own slow
+  `sync` (the socket's `heartbeat_seconds`, wired to the relabelled `Heartbeat (s)` widget,
+  default 90 s) plus the backfill on every (re)connect are the only polling left. The async
+  loop survives only to drive `SIMULATE` replay (no socket there). `PollTrigger`, `poll_count`,
+  and the direct `sync` import are dropped from the notebook.
   *Done when:* a real ALPSS shot drives a live update with no `alpss-dagster` change;
   polling is only the safety net. Commit `build(S5): push primary, poll heartbeat fallback`.
