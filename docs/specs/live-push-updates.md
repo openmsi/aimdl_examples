@@ -244,8 +244,9 @@ endpoint.
 
 ## 10. Open decisions
 
-- [ ] **Render library** (§7; decided at §12 S2): default Plotly `FigureWidget`, with
-      Bokeh or ipympl as alternatives.
+- [x] **Render library** (§7; decided at §12 S2): **Bokeh** (`ColumnDataSource` refill +
+      `push_notebook()`). Boxes are drawn manually from Tukey stats (`box_glyph_data`);
+      Plotly `FigureWidget` and ipympl were the alternatives.
 - [x] **Producer fields** (§4): both `itemId` and `experiment_date` are in the payload
       (confirmed live). Use `experiment_date` directly (== `meta.experiment_date`); ignore
       the fuller shot time in `File Name` to stay consistent with REST rows.
@@ -303,14 +304,15 @@ between steps.
   *Done when:* the notebook behaves identically under the poll; the seams are importable
   from `live.py`. Commit `build(S1): extract sync/trigger/render seams`.
 
-- [ ] **S2 — Render swap.**
+- [x] **S2 — Render swap.**
   Files: `live.py` render path, notebook. Replace `savefig`→PNG→`Image` with an incremental
-  widget. **Default: Plotly `FigureWidget`** (easiest in-notebook incremental update from
-  the current single-figure model; `go.Box` for boxes). Alternatives: Bokeh
-  (`stream()`+`push_notebook()`) or ipympl (§7). Confirm the choice with the user before
-  coding if it hasn't been settled.
+  widget. **Chosen: Bokeh** (user-confirmed over the Plotly default). `build_bokeh_figure`
+  builds the figure + `ColumnDataSource`s once; `update_bokeh` refills them and the notebook
+  `push_notebook`s the diff — no PNG round-trip. Boxes are manual: `box_glyph_data` computes
+  Tukey stats per category (median/quartiles/whiskers, `min_box_n` threshold), `point_glyph_data`
+  the jittered + highlighted points; both pure and unit-tested with no live server.
   *Done when:* live updates repaint in place (no PNG swap); visual check of boxes + points.
-  Commit `build(S2): incremental render via <lib>`.
+  Commit `build(S2): incremental render via Bokeh`.
 
 - [ ] **S3 — `partition?since=` in `sync`.**
   Files: `live.py`. Replace `count` + newest-first walk with the delta query.

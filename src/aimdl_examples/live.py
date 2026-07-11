@@ -19,6 +19,7 @@ rest stayed unseen, every poll would re-walk and re-download them.
 from __future__ import annotations
 
 import io
+import math
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Callable, Iterable, NamedTuple
@@ -26,6 +27,7 @@ from typing import Callable, Iterable, NamedTuple
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib.colors import to_hex
 
 from .alpss import ALPSS_MATERIAL_PROPS_FORM_ID
 from .download import get_item_to_memory
@@ -36,7 +38,8 @@ __all__ = [
     "parse_experiment_ts", "poll_count", "page_items", "fetch_new_items",
     "parse_row", "parse_many", "build_material_map", "material_for", "seed_store",
     "sync",
-    "build_view", "new_item_ids", "material_colors", "stable_ylim", "render",
+    "build_view", "new_item_ids", "material_colors", "stable_ylim",
+    "box_glyph_data", "point_glyph_data", "build_bokeh_figure", "update_bokeh",
 ]
 
 
@@ -406,16 +409,31 @@ def new_item_ids(base: pd.DataFrame, k: int) -> set[str]:
 
 
 # ---------------------------------------------------------------------------- render
+#
+# Incremental Bokeh render (§12 S2). The box stats are computed by two *pure* functions
+# (box_glyph_data / point_glyph_data) that turn a View into parallel-list glyph columns;
+# the figure builder and updater only push those dicts into ColumnDataSources and rescale
+# the axes. So a live tick repaints in place via push_notebook -- no savefig/PNG swap.
+# Bokeh is imported lazily inside the figure functions, so importing this module (and the
+# offline tests over the pure functions) needs no Bokeh installed.
 
-_PALETTE = plt.get_cmap("tab10").colors
-_GRAY = (0.78, 0.78, 0.78)
+_GRAY_HEX = "#c7c7c7"
 _HIGHLIGHT = "#d62728"
+
+_BOX_W = 0.65   # box body width, in category units (matches the old Matplotlib widths)
+_CAP_W = 0.2    # whisker cap width
+
+_BOX_KEYS = ("x", "x0", "x1", "xcap0", "xcap1",
+             "q1", "q2", "q3", "lower", "upper", "fill", "material")
+_POINT_KEYS = ("x", "y", "color", "size")
 
 
 def material_colors(materials: Iterable[str]) -> dict:
+    """material -> hex color. Bokeh wants hex/named colors, not 0-1 RGB tuples."""
     known = sorted({m for m in materials if m and m != UNKNOWN})
-    colors = {m: _PALETTE[i % len(_PALETTE)] for i, m in enumerate(known)}
-    colors[UNKNOWN] = _GRAY
+    palette = plt.get_cmap("tab10").colors
+    colors = {m: to_hex(palette[i % len(palette)]) for i, m in enumerate(known)}
+    colors[UNKNOWN] = _GRAY_HEX
     return colors
 
 
@@ -436,86 +454,151 @@ def stable_ylim(series: pd.Series) -> tuple[float, float]:
     return low - (pad if low < 0 else 0.0), high + pad
 
 
-def _draw_boxes(ax, view: View, xcol: str, metric: str, cfg: Config, colors: dict) -> None:
-    positions = {c: i for i, c in enumerate(view.categories)}
-    data, at, materials = [], [], []
+def _whiskers(values: np.ndarray, q1: float, q3: float) -> tuple[float, float]:
+    """Tukey whiskers: the most extreme datum within 1.5*IQR of the quartiles.
 
+    Matches Matplotlib's default boxplot (whis=1.5, showfliers=False), so the Bokeh boxes
+    look like the PNG they replace.
+    """
+    iqr = q3 - q1
+    inside = values[(values >= q1 - 1.5 * iqr) & (values <= q3 + 1.5 * iqr)]
+    if inside.size == 0:
+        return q1, q3
+    return float(inside.min()), float(inside.max())
+
+
+def box_glyph_data(view: View, xcol: str, metric: str, cfg: Config, colors: dict) -> dict:
+    """Per-category Tukey box stats as Bokeh glyph columns. Pure; no Bokeh import.
+
+    Only categories with n >= min_box_n get a box -- a box over n=2 is noise, exactly the
+    rule the Matplotlib path used. ``x`` is the category's index in ``view.categories``, so
+    boxes and points (which share the same positions) line up.
+    """
+    data: dict[str, list] = {k: [] for k in _BOX_KEYS}
+    positions = {c: i for i, c in enumerate(view.categories)}
     for category in view.categories:
         group = view.rows[view.rows[xcol] == category]
-        values = group[metric].dropna().values
-        if len(values) >= cfg.min_box_n:
-            data.append(values)
-            at.append(positions[category])
-            materials.append(category if xcol == "material_type"
-                             else group["material_type"].iloc[0])
-    if not data:
-        return
+        values = group[metric].dropna().to_numpy()
+        if values.size < cfg.min_box_n:
+            continue
+        q1, q2, q3 = (float(v) for v in np.percentile(values, [25, 50, 75]))
+        lower, upper = _whiskers(values, q1, q3)
+        material = (category if xcol == "material_type"
+                    else group["material_type"].iloc[0])
+        x = positions[category]
+        data["x"].append(x)
+        data["x0"].append(x - _BOX_W / 2)
+        data["x1"].append(x + _BOX_W / 2)
+        data["xcap0"].append(x - _CAP_W / 2)
+        data["xcap1"].append(x + _CAP_W / 2)
+        data["q1"].append(q1)
+        data["q2"].append(q2)
+        data["q3"].append(q3)
+        data["lower"].append(lower)
+        data["upper"].append(upper)
+        data["fill"].append(colors.get(material, _GRAY_HEX))
+        data["material"].append(material or UNKNOWN)
+    return data
 
-    boxes = ax.boxplot(
-        data, positions=at, widths=0.65, showfliers=False, patch_artist=True,
-        medianprops=dict(color="black", linewidth=1.2),
-        whiskerprops=dict(color="black", linewidth=0.8),
-        capprops=dict(color="black", linewidth=0.8),
-    )
-    for patch, material in zip(boxes["boxes"], materials):
-        patch.set_facecolor(colors.get(material, _GRAY))
-        patch.set_alpha(0.35)
-        patch.set_edgecolor("black")
-        patch.set_linewidth(0.8)
 
+def point_glyph_data(view: View, xcol: str, metric: str,
+                     new_ids: set, highlight: bool) -> dict:
+    """Every plottable point as scatter columns (x = position + stamped jitter). Pure.
 
-def _draw_points(ax, view: View, xcol: str, metric: str, new_ids: set, highlight: bool) -> None:
+    All rows are drawn, including categories too small for a box, so single shots still
+    show. New arrivals (by ``itemId``) are drawn larger and red, matching the old highlight.
+    """
+    if view.rows.empty:
+        return {k: [] for k in _POINT_KEYS}
     positions = {c: i for i, c in enumerate(view.categories)}
-    x = view.rows[xcol].map(positions).astype(float) + view.rows["_jit"]
-    is_new = view.rows["itemId"].isin(new_ids) & bool(highlight)
-
-    ax.scatter(x[~is_new], view.rows.loc[~is_new, metric],
-               color="black", s=9, alpha=0.4, zorder=10, clip_on=False)
-    if is_new.any():
-        ax.scatter(x[is_new], view.rows.loc[is_new, metric], color=_HIGHLIGHT, s=40,
-                   alpha=0.95, zorder=12, edgecolor="white", linewidth=0.6, clip_on=False)
-
-
-def _draw_empty_note(ax, view: View, metric: str) -> None:
-    """A timeframe can hold plenty of items yet no rows reporting this metric -- spall
-    exists on only ~7% of results. Say which, rather than showing a blank axis."""
-    newest = view.base["experiment_ts"].max() if not view.base.empty else pd.NaT
-    note = f"no {metric} results in this timeframe"
-    if pd.notna(newest):
-        note += f"\nnewest: {newest.date()}"
-    ax.text(0.5, 0.5, note, ha="center", va="center", transform=ax.transAxes,
-            fontsize=10, color="#777")
+    rows = view.rows
+    is_new = rows["itemId"].isin(new_ids) & bool(highlight)
+    x = rows[xcol].map(positions).astype(float) + rows["_jit"]
+    return {
+        "x": x.tolist(),
+        "y": rows[metric].tolist(),
+        "color": [_HIGHLIGHT if n else "black" for n in is_new],
+        "size": [10.0 if n else 6.0 for n in is_new],
+    }
 
 
-def render(ax, view: View, cfg: Config, *, xcol: str, metric: str,
-           new_ids: set = frozenset(), highlight: bool = True) -> None:
-    ax.clear()
+def build_bokeh_figure(cfg: Config):
+    """Create the figure + ColumnDataSources once. Returns ``(figure, sources)``.
+
+    ``sources`` is ``{"box", "pt", "note"}``: the two data sources :func:`update_bokeh`
+    refills each tick, plus the empty-timeframe Label. Bokeh is imported here so the module
+    imports without it.
+    """
+    from bokeh.models import ColumnDataSource, Label
+    from bokeh.plotting import figure
+
+    box = ColumnDataSource({k: [] for k in _BOX_KEYS})
+    pts = ColumnDataSource({k: [] for k in _POINT_KEYS})
+
+    p = figure(width=880, height=420, tools="pan,wheel_zoom,box_zoom,reset,save",
+               toolbar_location="above", x_range=(-0.5, 0.5))
+    p.xgrid.visible = False
+    p.ygrid.grid_line_dash = "dashed"
+    p.ygrid.grid_line_alpha = 0.25
+    p.xaxis.major_label_orientation = math.pi / 4
+
+    # whiskers + caps, then the box body (colored by material) and median, then points
+    p.segment("x", "upper", "x", "q3", source=box, line_color="black", line_width=0.8)
+    p.segment("x", "lower", "x", "q1", source=box, line_color="black", line_width=0.8)
+    p.segment("xcap0", "upper", "xcap1", "upper", source=box, line_color="black")
+    p.segment("xcap0", "lower", "xcap1", "lower", source=box, line_color="black")
+    p.vbar("x", _BOX_W, "q1", "q3", source=box, fill_color="fill", fill_alpha=0.35,
+           line_color="black", line_width=0.8, legend_field="material")
+    p.segment("x0", "q2", "x1", "q2", source=box, line_color="black", line_width=1.5)
+    p.scatter("x", "y", source=pts, size="size", color="color", alpha=0.6,
+              line_color="white", line_width=0.4)
+
+    p.legend.label_text_font_size = "8px"
+    p.legend.location = "top_left"
+    p.legend.background_fill_alpha = 0.6
+
+    note = Label(x=440, y=210, x_units="screen", y_units="screen", text="",
+                 text_align="center", text_color="#777", text_font_size="12px",
+                 visible=False)
+    p.add_layout(note)
+
+    return p, {"box": box, "pt": pts, "note": note}
+
+
+def update_bokeh(p, sources: dict, view: View, cfg: Config, *, xcol: str, metric: str,
+                 new_ids: set = frozenset(), highlight: bool = True) -> None:
+    """Refill the figure's sources and rescale its axes for ``view``. In place; no PNG.
+
+    Assigning ``source.data`` ships a diff over the widget comm, so the shown plot repaints
+    where it is -- the caller only has to ``push_notebook`` afterwards.
+    """
     empty = view.rows.empty
-    colors = material_colors(view.rows["material_type"]) if not empty else {UNKNOWN: _GRAY}
+    colors = (material_colors(view.rows["material_type"]) if not empty
+              else {UNKNOWN: _GRAY_HEX})
+    sources["box"].data = box_glyph_data(view, xcol, metric, cfg, colors)
+    sources["pt"].data = point_glyph_data(view, xcol, metric, new_ids, highlight)
 
-    if empty:
-        _draw_empty_note(ax, view, metric)
-    else:
-        _draw_boxes(ax, view, xcol, metric, cfg, colors)
-        _draw_points(ax, view, xcol, metric, new_ids, highlight)
+    n = len(view.categories)
+    p.x_range.start, p.x_range.end = -0.5, max(n - 0.5, 0.5)
+    p.y_range.start, p.y_range.end = stable_ylim(
+        view.base[metric] if not view.base.empty else pd.Series(dtype=float))
 
     counts = view.rows[xcol].value_counts().to_dict() if not empty else {}
-    ax.set_xticks(np.arange(len(view.categories)))
-    ax.set_xticklabels([f"{c}\n(n={counts.get(c, 0)})" for c in view.categories],
-                       rotation=45, ha="right")
-    ax.set_xlim(-0.5, max(len(view.categories) - 0.5, 0.5))
-    ax.set_ylim(*stable_ylim(view.base[metric] if not view.base.empty
-                             else pd.Series(dtype=float)))
-    ax.set_xlabel({"igsn": "IGSN", "material_type": "Material"}[xcol])
-    ax.set_ylabel(METRICS[metric]["ylabel"])
-    ax.axhline(0, color="#999", linewidth=0.6, zorder=1)
-    ax.grid(True, linestyle="--", alpha=0.25, zorder=0)
+    p.xaxis.ticker = list(range(n))
+    p.xaxis.major_label_overrides = {
+        i: f"{c} (n={counts.get(c, 0)})" for i, c in enumerate(view.categories)
+    }
+    p.xaxis.axis_label = {"igsn": "IGSN", "material_type": "Material"}[xcol]
+    p.yaxis.axis_label = METRICS[metric]["ylabel"]
+    # material colors need no legend when the x-axis already IS material
+    p.legend.visible = (xcol == "igsn") and not empty
 
-    if xcol == "igsn" and not empty:
-        present = list(dict.fromkeys(view.rows["material_type"]))
-        ax.legend(
-            handles=[plt.Line2D([], [], marker="s", linestyle="", markersize=8,
-                                markerfacecolor=colors[m], markeredgecolor="black",
-                                alpha=0.6, label=m) for m in present],
-            fontsize=7, loc="upper left", frameon=False, ncol=2,
-        )
+    note = sources["note"]
+    if empty:
+        newest = view.base["experiment_ts"].max() if not view.base.empty else pd.NaT
+        text = f"no {metric} results in this timeframe"
+        if pd.notna(newest):
+            text += f" (newest: {newest.date()})"
+        note.text, note.visible = text, True
+    else:
+        note.visible = False

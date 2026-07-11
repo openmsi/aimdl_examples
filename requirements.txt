@@ -1,6 +1,11 @@
 pandas
 numpy
 python-dotenv
+requests
 girder-client
 ipykernel
+ipywidgets
+jupyterlab
 matplotlib
+bokeh
+jupyter_bokeh   # renders Bokeh output + push_notebook in JupyterLab 4 / Notebook 7
