@@ -47,7 +47,7 @@ and the Girder `item_id` (`assets.py:194`) both exist.
 ```
   ALPSS Dagster asset (PRODUCER)               [server side: implemented]
     compute result row → upload → set data_type=pdv_alpss_result
-                        → publish full row (+ itemId) to Girder ws
+                        → publish full row (+ itemId, experiment_date) to Girder ws
         │
         ▼
   Girder WebSocket  wss://girder.htmdec.org/notifications/public
@@ -74,20 +74,21 @@ The producer publishes the full ALPSS result row to the Girder ws at the point t
 is uploaded and classified `pdv_alpss_result` (Dagster job, `assets.py`, the `results`
 branch). This side is already working (observed in a live announcement).
 
-**One addition requested of the producer** (trivial — the value is already in scope at
-the emit site):
+**Both requested fields are now in the payload** (confirmed in a live announcement):
 
-- `itemId` — the Girder item id (`assets.py:194`). Gives the client a **stable dedup key
-  that matches the REST backfill path**, plus a convenience link. Without it we would have
-  to key on `File Name`, which is more fragile.
+- `itemId` — the Girder item id (e.g. `6a5101df6d1201b93e76daf8`). The **stable dedup key
+  that matches the REST backfill path** (item `_id`), plus a convenience link.
+- `experiment_date` — e.g. `"2026-02-05"`. This is the **same value the producer writes to
+  `meta.experiment_date`** (same `experiment_date` variable in `assets.py`), so using it
+  makes live rows consistent with REST-seeded rows by construction. It is day-granular
+  today and will gain a time component when the upstream date bug is fixed — both paths
+  upgrade together automatically, no notebook change. **Prefer this field over parsing
+  `File Name`**, which carries the fuller shot time (`…_2026-02-05_21-08-12_…`): that extra
+  precision would *diverge* from the day-granular `meta.experiment_date` and desync the two
+  paths.
 
-**`experiment_date` is *not* added to the payload** — the client derives it from the
-`File Name` already in the message (see §6/§7). That filename is the same source the
-OpenMSIStream consumer uses to set `meta.experiment_date`
-(`xarthisius/girder-consumers/common/base.py` `parse_date`), so parsing it in the notebook
-with the same rule keeps live rows consistent with REST-seeded rows — and adds no work for
-the sysadmin. Note the payload's `Date`/`Time` fields are when *ALPSS ran*, not the shot;
-do not use them for windowing (the clock trap documented in `src/aimdl_examples/live.py`).
+Note the payload's `Date`/`Time` fields are when *ALPSS ran*, not the shot; do not use them
+for windowing (the clock trap in `src/aimdl_examples/live.py`).
 
 Failure isolation still applies on the producer: a publish error must never fail the asset.
 
@@ -106,23 +107,24 @@ Failure isolation still applies on the producer: a publish error must never fail
   Python's `json.loads` accepts these (→ `float('nan')`), which the row builder already
   treats as "no value." A stricter parser would need `parse_constant`.
 
-## 6. Message schema (observed, with itemId added)
+## 6. Message schema (observed — itemId and experiment_date present)
 
 ```jsonc
 {
   "type": "pdv_alpss_result",
   "data": {
-    // --- requested addition ---
-    "itemId": "665f…",                          // dedup key; matches REST item _id
+    // --- added at our request ---
+    "itemId": "6a5101df6d1201b93e76daf8",       // dedup key; matches REST item _id
+    "experiment_date": "2026-02-05",             // day-granular; == meta.experiment_date
 
     // --- already present ---
-    "igsn": "JHABOX00000",
-    "File Name": "C1--JHABOX00000_2026-06-26_15-25-18_shot16--00000.csv",
-                                                 // ↑ experiment_date is parsed from this
-    "Velocity at Max Compression": 12.006,      // == METRICS[VELOCITY]["src"]
+    "igsn": "JHAMAC00003-S7R5C3",
+    "File Name": "JHAMAC00003-S7R5C3_2026-02-05_21-08-12_shot02_ch1.csv",
+                                                 // carries full shot time; NOT used (see §4)
+    "Velocity at Max Compression": 6.4599,      // == METRICS[VELOCITY]["src"]
     "Spall Strength": NaN,                       // == METRICS[SPALL]["src"] (×1e-9)
     "Velocity OK": false, "Spall OK": false,     // flags; not used for plotting
-    "Date": "Jun 29 2026", "Time": "05:14 PM",   // ALPSS RUN time — do NOT window on this
+    "Date": "Jun 11 2026", "Time": "05:15 PM",   // ALPSS RUN time — do NOT window on this
     "…": "…"                                      // full ALPSS output row
   }
 }
@@ -133,10 +135,10 @@ Key alignment: the metric keys in `data` are exactly `METRICS[...]["src"]`
 is the same loop `parse_row` already runs — just reading from the message dict instead of
 a CSV row.
 
-`experiment_date` is derived from `File Name`, not sent: the `YYYY-MM-DD_HH-MM-SS` token
-(`2026-06-26_15-25-18` above) is the shot time. Parse it with the same rule as
-`girder-consumers/common/base.py` `parse_date` so it equals `meta.experiment_date` on the
-REST-seeded rows.
+Use `data["experiment_date"]` directly (via `parse_experiment_ts`); it is the same value
+as `meta.experiment_date` on REST-seeded rows, so the two paths stay consistent and both
+upgrade to full precision together when the upstream date bug is fixed. Do **not** parse
+the fuller shot time out of `File Name` — it would diverge from the day-granular metadata.
 
 ## 7. Client (notebook — to build)
 
@@ -147,9 +149,9 @@ Refactor the notebook's fused `tick()` loop into the three seams from §3.
   - `itemId` ← `data["itemId"]` (dedup key; identical to the REST path's item `_id`)
   - `igsn` ← `data["igsn"]`
   - metrics ← same `spec["src"]` loop as `parse_row`
-  - `experiment_ts` ← parse the `YYYY-MM-DD_HH-MM-SS` shot token out of
-    `data["File Name"]`, mirroring `girder-consumers/common/base.py` `parse_date`, then
-    `parse_experiment_ts`. Matches `meta.experiment_date` on REST-seeded rows.
+  - `experiment_ts` ← `parse_experiment_ts(data["experiment_date"])` — the same value as
+    `meta.experiment_date`, so live and REST rows agree by construction (do not parse
+    `File Name`; see §4).
   - `created` ← client receipt time (only a tiebreaker; the socket carries no Girder
     ingest time)
   - `arrival_seq` / `_jit` ← assigned by `Store._admit`, exactly as today
@@ -213,10 +215,10 @@ Phased so each step is independently useful:
    heartbeat. *Verify:* a real announcement renders within ~1–2 s; killing the socket and
    reconnecting backfills the gap; the same result over socket then `sync` is admitted
    once.
-4. **Confirm `itemId` in the payload.** Once `itemId` lands, key `Store.seen` on it across
-   both paths. *Verify:* a result seen over the socket and again in a `sync` is admitted
-   once (dedup key matches REST `_id`). `experiment_date` is filename-derived by design, no
-   producer dependency.
+4. **Payload fields confirmed** (`itemId` + `experiment_date` both present). Key
+   `Store.seen` on `itemId` across both paths. *Verify:* a result seen over the socket and
+   again in a `sync` is admitted once (dedup matches REST `_id`), and its `experiment_ts`
+   equals the REST row's (same `experiment_date` value).
 5. **Cut poll cadence to fallback heartbeat.** Push is primary; polling is the safety net.
 
 Steps 1–2 land value before the socket work; step 3 works against the already-live
@@ -225,9 +227,9 @@ endpoint.
 ## 10. Open decisions
 
 - [ ] **Render library** (§7): Plotly vs Bokeh vs ipympl.
-- [x] **Producer fields** (§4): `itemId` will be added (dedup key). `experiment_date` will
-      *not* be added — derived in the notebook from `File Name`, matching how
-      `meta.experiment_date` is set upstream.
+- [x] **Producer fields** (§4): both `itemId` and `experiment_date` are in the payload
+      (confirmed live). Use `experiment_date` directly (== `meta.experiment_date`); ignore
+      the fuller shot time in `File Name` to stay consistent with REST rows.
 - [ ] **Spec home** — kept in this repo (dashboard); producer change lives in
       `alpss-dagster`. Confirm this split.
 
