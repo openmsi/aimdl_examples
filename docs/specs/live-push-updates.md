@@ -28,8 +28,8 @@ Two properties of the real implementation shape the client:
 - **It's a *fat* notification.** The payload is the **entire ALPSS result row** (all
   metrics, `igsn`, filename, OK-flags), not a thin doorbell — so the dashboard's **live
   path needs no fetch at all**: it builds a plot row straight from the message.
-- **It's triggered server-side on metadata mutation** of a `pdv_alpss_result` item (see
-  §4), not by an explicit publish call in the producer.
+- **It's triggered server-side by Girder's `item.updated` event** (metadata change) on a
+  `pdv_alpss_result` item (see §4), not by an explicit publish call in the producer.
 - **It's a public firehose.** `/notifications/public` forwards all announcements;
   the client **filters by `message["type"] == "pdv_alpss_result"`**.
 
@@ -69,14 +69,19 @@ almost none of the earlier polling work is wasted):
 
 ## 4. Producer / trigger (server side — implemented, no code change expected)
 
-The announcement is emitted **server-side on metadata mutation of a `pdv_alpss_result`
-item** — confirmed by the test that editing an existing result item's metadata fires an
-announcement (§9). In normal operation the ALPSS Dagster job's existing
-`addMetadataToItem` call (`assets.py:196`) is the trigger, so **no code change to
-`alpss-dagster` is expected** (to confirm on a real run). Girder assembles the payload —
-the full ALPSS result row plus `itemId` and `experiment_date` — and publishes it. A
-notification failure is a Girder-side concern, decoupled from the upload; it cannot fail
-the asset.
+The announcement is emitted by a **server-side hook on Girder's `item.updated` event**
+(fires when an item's metadata changes). This is deliberate: Dagster uploads in two steps —
+create the file, then `addMetadataToItem` — and only *after* the metadata step is the item
+known to be a `pdv_alpss_result`. So the hook keys on the metadata write
+(`assets.py:196`), which means **no code change to `alpss-dagster` is expected** — the
+write it already does is the trigger. Girder assembles the payload (the full ALPSS result
+row plus `itemId` and `experiment_date`) and publishes it. A notification failure is a
+Girder-side concern, decoupled from the upload; it cannot fail the asset.
+
+**Caveat (from the sysadmin):** because the trigger is `item.updated`, *any* metadata
+change to a matching item re-emits — including edits unrelated to a new result. The client
+must be robust to repeat and spurious notifications; `itemId` dedup handles this (§8). This
+is also exactly why the manual test in §9 works.
 
 **Both fields we rely on are in the payload** (confirmed in a live announcement):
 
@@ -191,8 +196,12 @@ throwaway is fast adaptive poll cadence, which degrades into the fallback heartb
 - **Best-effort delivery, exactly-correct state.** Announcements may be lost, duplicated,
   or arrive out of order. Correctness comes from idempotent `sync(since)` + `itemId`
   dedup, never from the socket.
-- **Dedup:** `Store.seen` keys on `itemId`; a duplicated announcement or a live/backfill
-  overlap → no double-count.
+- **Dedup:** `Store.seen` keys on `itemId`. Because the trigger is `item.updated`, repeat
+  and unrelated-edit notifications for an already-seen `itemId` are *expected* — they
+  ingest as no-ops. Ingestion is **first-wins**: an already-seen item is not re-read, so a
+  re-emission carrying *changed* values would not update the plot. That is fine for
+  write-once ALPSS results; if corrected re-runs must update the live view, switch the
+  store to upsert-by-`itemId` (small change; out of scope for v1).
 - **Backfill on connect** guarantees a dashboard opened mid-run, or one that dropped, is
   consistent within one `sync`.
 - **Ordering:** `arrival_seq` defines "new"; unaffected by socket ordering because live
