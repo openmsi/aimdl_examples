@@ -142,6 +142,34 @@ def test_sync_watermark_holds_on_failure_then_recovers(monkeypatch):
     assert store.since == "MARK"
 
 
+def test_sync_watermark_holds_on_per_item_error_then_retries(monkeypatch):
+    # A per-item parse failure (result is None) must hold the watermark, exactly like a
+    # raised fetch. The item stays unseen, but under the partition?since= delta "unseen" is
+    # not enough to be retried: advancing past its partition would strand it, so sync only
+    # advances on a fully clean pass.
+    queried = []
+
+    def tracking_partition(gc, cfg, since):
+        queried.append(since)
+        return {"IG1"}
+
+    monkeypatch.setattr(live, "partition_igsns", tracking_partition)
+    monkeypatch.setattr(live, "igsn_items",
+                        lambda gc, cfg, igsn: [_item("r", "2026-02-05T01:00:00+00:00")])
+    results = [[None], [_row("r")]]             # pass 1: parse error; pass 2: clean
+    monkeypatch.setattr(live, "parse_many", lambda gc, batch, workers: results.pop(0))
+    monkeypatch.setattr(live, "_utcnow_iso", lambda: "MARK")
+
+    store = Store(since="T0")
+    assert sync(None, store, Config()) == (0, 0, 1)   # errored; nothing admitted
+    assert store.since == "T0"                        # held, not advanced past the failure
+    assert "r" not in store.seen                      # still unseen -> eligible to retry
+
+    assert sync(None, store, Config()) == (1, 0, 0)   # retried and recovered
+    assert queried == ["T0", "T0"]                    # same window re-queried; no gap
+    assert store.since == "MARK"
+
+
 def test_seed_store_sets_watermark_to_bound_live_sync(monkeypatch):
     # one page covers the (single) required IGSN, then empty -> seed stops and marks the
     # watermark, so the first live sync pulls only partitions updated after the seed.
@@ -154,6 +182,26 @@ def test_seed_store_sets_watermark_to_bound_live_sync(monkeypatch):
     store = Store()
     live.seed_store(None, store, Config(seed_igsns=1), log=lambda *_: None)
     assert store.since == "SEED-MARK"
+
+
+def test_seed_store_snapshots_watermark_before_paging(monkeypatch):
+    # The mark must be taken BEFORE the (slow) seed, so the first live sync overlaps the
+    # seed window and backfills anything uploaded during it. Model a clock that advances as
+    # the seed pages; the watermark must be the pre-seed tick, not a later one.
+    clock = iter(["T0-before-seed", "T1-during", "T2-after"])
+    monkeypatch.setattr(live, "_utcnow_iso", lambda: next(clock))
+
+    def paging(gc, cfg, offset):
+        live._utcnow_iso()              # the seed does work -> the clock advances meanwhile
+        return [{"_id": "a"}] if offset == 0 else []
+
+    monkeypatch.setattr(live, "page_items", paging)
+    monkeypatch.setattr(live, "parse_many",
+                        lambda gc, batch, workers: [_row(i["_id"]) for i in batch])
+
+    store = Store()
+    live.seed_store(None, store, Config(seed_igsns=1), log=lambda *_: None)
+    assert store.since == "T0-before-seed"   # captured before the seed, not after
 
 
 # ------------------------------------------------------- push trigger / live path (S4)

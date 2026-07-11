@@ -320,6 +320,12 @@ def seed_store(gc, store: Store, cfg: Config,
     the highest ``arrival_seq`` lands on the *oldest* row, so the highlight marks
     exactly the wrong points.
     """
+    # Snapshot the watermark *before* the seed, not after: seeding pages and downloads for
+    # seconds-to-minutes, and a result uploaded during that window is missed by newest-first
+    # offset paging. Marking here makes the first live `sync` re-list any partition changed
+    # during the seed and backfill it (dedup drops what the seed already caught). Cheap: the
+    # historical seed items predate this mark, so only genuinely concurrent changes re-list.
+    before = _utcnow_iso()
     items: list[dict] = []
     results: list = []
     offset = scanned = 0
@@ -341,8 +347,8 @@ def seed_store(gc, store: Store, cfg: Config,
 
     added, skipped, errors = store.ingest(list(reversed(items)), list(reversed(results)))
     log(f"  ingested +{added} | {skipped} without any metric | {errors} errors")
-    # From here the live path tracks forward: only partitions updated after the seed.
-    store.since = _utcnow_iso()
+    # The first live `sync` reconciles the [before, now] overlap; see the snapshot above.
+    store.since = before
     return scanned
 
 
@@ -355,11 +361,18 @@ def sync(gc, store: Store, cfg: Config) -> tuple[int, int, int]:
     re-downloaded, then download+``parse_row``+ingest oldest-first (by server ``created``)
     so ``arrival_seq`` ascends with shot order.
 
-    The watermark advances to a time captured *before* the query, and only after a clean
-    pass: a raised fetch leaves ``store.since`` put, so the next ``sync`` re-queries the
-    same window and recovers the missed interval. Idempotent via ``itemId`` dedup in
-    :meth:`Store.ingest`, so any trigger -- poll, reconnect, heartbeat -- may call it, and
-    the overlap a rewound watermark re-lists ingests as no-ops.
+    The watermark advances to a time captured *before* the query, and only on a fully
+    clean pass -- **no per-item errors and no raised fetch**. Either failure leaves
+    ``store.since`` put, so the next ``sync`` re-queries the same window and recovers the
+    missed items. Holding on a per-item error is load-bearing, not just tidy: an errored
+    item stays unseen (:meth:`Store.ingest`), but "unseen" alone no longer means "retried"
+    under the ``partition?since=`` delta -- once the watermark passes its partition, that
+    partition is never re-listed. Holding the watermark is what actually gets it retried.
+    Idempotent via ``itemId`` dedup, so any trigger -- poll, reconnect, heartbeat -- may
+    call it, and the overlap a held watermark re-lists ingests as no-ops. (A persistently
+    failing item pins the watermark and re-scans its window each tick; bounded and
+    self-healing today, and the planned explicit retry set removes even that -- see
+    ``docs/notes/sync-watermark-retry.md``.)
     """
     before = _utcnow_iso()
     items: list[dict] = []
@@ -367,9 +380,10 @@ def sync(gc, store: Store, cfg: Config) -> tuple[int, int, int]:
         items += [it for it in igsn_items(gc, cfg, igsn) if it["_id"] not in store.seen]
     items.sort(key=lambda it: it.get("created", ""))   # ISO strings sort chronologically
     results = parse_many(gc, items, cfg.max_workers)
-    outcome = store.ingest(items, results)
-    store.since = before
-    return outcome
+    added, skipped, errors = store.ingest(items, results)
+    if errors == 0:                 # a per-item error holds the watermark so it re-lists
+        store.since = before
+    return added, skipped, errors
 
 
 # ---------------------------------------------------------------------- push trigger
