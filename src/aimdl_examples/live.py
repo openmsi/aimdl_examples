@@ -32,9 +32,10 @@ from .download import get_item_to_memory
 
 __all__ = [
     "VELOCITY", "SPALL", "METRICS", "TIMEFRAMES", "UNKNOWN", "SKIP",
-    "Config", "Store", "View",
+    "Config", "PollTrigger", "Store", "View",
     "parse_experiment_ts", "poll_count", "page_items", "fetch_new_items",
     "parse_row", "parse_many", "build_material_map", "material_for", "seed_store",
+    "sync",
     "build_view", "new_item_ids", "material_colors", "stable_ylim", "render",
 ]
 
@@ -111,6 +112,26 @@ def parse_experiment_ts(value) -> pd.Timestamp:
 def poll_count(gc, cfg: Config) -> int | None:
     """Cheap change-detector: one request, no downloads."""
     return gc.get("aimdl/count").get(cfg.data_type)
+
+
+@dataclass
+class PollTrigger:
+    """The trigger seam, poll flavor: "new data exists" when the server count moves.
+
+    ``changed`` and ``commit`` are deliberately separate: the watermark advances only
+    after a sync succeeds, so a fetch that raises is retried on the next tick rather
+    than silently skipped.
+    """
+
+    last: int | None = None
+
+    def changed(self, gc, cfg: Config) -> int | None:
+        """-> the new count if it differs from the committed one, else ``None``."""
+        count = poll_count(gc, cfg)
+        return None if count == self.last else count
+
+    def commit(self, count: int | None) -> None:
+        self.last = count
 
 
 def page_items(gc, cfg: Config, offset: int, limit: int = 50) -> list[dict]:
@@ -286,6 +307,19 @@ def seed_store(gc, store: Store, cfg: Config,
     added, skipped, errors = store.ingest(list(reversed(items)), list(reversed(results)))
     log(f"  ingested +{added} | {skipped} without any metric | {errors} errors")
     return scanned
+
+
+def sync(gc, store: Store, cfg: Config) -> tuple[int, int, int]:
+    """The fetch seam: catch up on everything the store has not seen, parse, ingest.
+
+    -> ``(added, skipped, errors)``. The watermark is ``store.seen`` (newest-first walk
+    with stop-on-seen); ingestion goes oldest-first so ``arrival_seq`` ascends with shot
+    order. Idempotent via ``itemId`` dedup in :meth:`Store.ingest`, so callers may
+    invoke it on any trigger -- poll, reconnect, or heartbeat -- without double-adding.
+    """
+    items = list(reversed(fetch_new_items(gc, cfg, store.seen)))
+    results = parse_many(gc, items, cfg.max_workers)
+    return store.ingest(items, results)
 
 
 # ------------------------------------------------------------------------------ view

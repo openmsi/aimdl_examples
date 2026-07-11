@@ -297,7 +297,7 @@ between steps.
 
 **Steps:**
 
-- [ ] **S1 — Extract seams (pure refactor, no behavior change).**
+- [x] **S1 — Extract seams (pure refactor, no behavior change).**
   Files: `live.py`, `tutorials/live_alpss_boxplot.ipynb`. Split the fused poll loop into
   `sync(since)` / trigger / render, still driven by the existing poll.
   *Done when:* the notebook behaves identically under the poll; the seams are importable
