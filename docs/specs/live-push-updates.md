@@ -244,7 +244,8 @@ endpoint.
 
 ## 10. Open decisions
 
-- [ ] **Render library** (§7): Plotly vs Bokeh vs ipympl.
+- [ ] **Render library** (§7; decided at §12 S2): default Plotly `FigureWidget`, with
+      Bokeh or ipympl as alternatives.
 - [x] **Producer fields** (§4): both `itemId` and `experiment_date` are in the payload
       (confirmed live). Use `experiment_date` directly (== `meta.experiment_date`); ignore
       the fuller shot time in `File Name` to stay consistent with REST rows.
@@ -265,4 +266,66 @@ endpoint.
   still kept for seed/backfill — that part is unchanged).
 - **Replacing polling entirely with no fallback** (rejected: the heartbeat is cheap
   insurance against lossy delivery).
-```
+
+## 12. Build sequence & context strategy
+
+Built as a series of small, independently committed steps, each done in its **own Claude
+Code session** (`/clear` between them). The spec — not the chat history — is the memory: a
+fresh session re-reads this file, finds where the work is, and continues. Keep each session
+to **one step, then stop and report**, so context stays small and there is a review point
+between steps.
+
+**How a session orients (do this first, every session):**
+
+1. Read this spec.
+2. Find the next step to do: the lowest step in the checklist below that is both unchecked
+   *and* has no matching `build(Sx): …` commit in `git log --oneline` on the
+   `spec/live-push-updates` branch. (Check both, in case a prior session ticked the box but
+   did not finish, or vice versa.)
+3. Do **only** that step. Verify against its *Done when*. Tick its box in this file. Commit
+   with the `build(Sx):` marker. Then stop and summarize — do not start the next step.
+
+**Working conventions:**
+
+- **Logic in `src/aimdl_examples/live.py`; keep the notebook thin** (wiring + widgets only).
+  Verbose notebook JSON is expensive to re-read and hard to diff.
+- **Clear notebook outputs before committing.**
+- **Add/extend unit tests** for pure functions as the verify gate (`row_from_notification`,
+  `itemId` dedup, date/consistency). Tests must pass with no live server.
+- One step per session; don't jump ahead or bundle steps.
+- Commit trailer: `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
+
+**Steps:**
+
+- [ ] **S1 — Extract seams (pure refactor, no behavior change).**
+  Files: `live.py`, `tutorials/live_alpss_boxplot.ipynb`. Split the fused poll loop into
+  `sync(since)` / trigger / render, still driven by the existing poll.
+  *Done when:* the notebook behaves identically under the poll; the seams are importable
+  from `live.py`. Commit `build(S1): extract sync/trigger/render seams`.
+
+- [ ] **S2 — Render swap.**
+  Files: `live.py` render path, notebook. Replace `savefig`→PNG→`Image` with an incremental
+  widget. **Default: Plotly `FigureWidget`** (easiest in-notebook incremental update from
+  the current single-figure model; `go.Box` for boxes). Alternatives: Bokeh
+  (`stream()`+`push_notebook()`) or ipympl (§7). Confirm the choice with the user before
+  coding if it hasn't been settled.
+  *Done when:* live updates repaint in place (no PNG swap); visual check of boxes + points.
+  Commit `build(S2): incremental render via <lib>`.
+
+- [ ] **S3 — `partition?since=` in `sync`.**
+  Files: `live.py`. Replace `count` + newest-first walk with the delta query.
+  *Done when:* new results appear; a forced-missed interval is recovered on the next
+  `sync`; `itemId` dedup holds. Commit `build(S3): partition?since= delta in sync`.
+
+- [ ] **S4 — `GirderWebSocketSource` + `row_from_notification`.**
+  Files: `live.py`, notebook. Connect to `wss://girder.htmdec.org/notifications/public`,
+  auth with `gc.token`, filter `type == "pdv_alpss_result"`, build rows with zero fetch;
+  wire connect/reconnect backfill and the fallback heartbeat.
+  *Done when:* the §9 manual metadata-edit trigger renders within ~1–2 s; reconnecting after
+  a kill backfills the gap; a result seen over the socket then again via `sync` is admitted
+  once. Commit `build(S4): GirderWebSocketSource + row_from_notification`.
+
+- [ ] **S5 — Push primary, poll → heartbeat; end-to-end.**
+  Files: notebook. Reduce polling to the slow fallback heartbeat.
+  *Done when:* a real ALPSS shot drives a live update with no `alpss-dagster` change;
+  polling is only the safety net. Commit `build(S5): push primary, poll heartbeat fallback`.
