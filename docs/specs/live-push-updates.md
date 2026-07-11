@@ -47,7 +47,7 @@ and the Girder `item_id` (`assets.py:194`) both exist.
 ```
   ALPSS Dagster asset (PRODUCER)               [server side: implemented]
     compute result row → upload → set data_type=pdv_alpss_result
-                        → publish full row (+ itemId, experiment_date) to Girder ws
+                        → publish full row (+ itemId) to Girder ws
         │
         ▼
   Girder WebSocket  wss://girder.htmdec.org/notifications/public
@@ -74,20 +74,22 @@ The producer publishes the full ALPSS result row to the Girder ws at the point t
 is uploaded and classified `pdv_alpss_result` (Dagster job, `assets.py`, the `results`
 branch). This side is already working (observed in a live announcement).
 
-**Two additions requested of the producer** (both trivial — the values are already in
-scope at the emit site):
+**One addition requested of the producer** (trivial — the value is already in scope at
+the emit site):
 
 - `itemId` — the Girder item id (`assets.py:194`). Gives the client a **stable dedup key
   that matches the REST backfill path**, plus a convenience link. Without it we would have
   to key on `File Name`, which is more fragile.
-- `experiment_date` — explicit ISO 8601 (`assets.py` `experiment_date`). The client
-  **windows on when the shot was fired**, and the payload's `Date`/`Time` fields are when
-  *ALPSS ran*, not the experiment (the exact clock trap documented in
-  `src/aimdl_examples/live.py`). Recoverable from the filename if absent, but cleaner as a
-  field.
 
-This spec assumes both land. Failure isolation still applies on the producer: a publish
-error must never fail the asset.
+**`experiment_date` is *not* added to the payload** — the client derives it from the
+`File Name` already in the message (see §6/§7). That filename is the same source the
+OpenMSIStream consumer uses to set `meta.experiment_date`
+(`xarthisius/girder-consumers/common/base.py` `parse_date`), so parsing it in the notebook
+with the same rule keeps live rows consistent with REST-seeded rows — and adds no work for
+the sysadmin. Note the payload's `Date`/`Time` fields are when *ALPSS ran*, not the shot;
+do not use them for windowing (the clock trap documented in `src/aimdl_examples/live.py`).
+
+Failure isolation still applies on the producer: a publish error must never fail the asset.
 
 ## 5. Transport — Girder WebSocket (resolved)
 
@@ -104,19 +106,19 @@ error must never fail the asset.
   Python's `json.loads` accepts these (→ `float('nan')`), which the row builder already
   treats as "no value." A stricter parser would need `parse_constant`.
 
-## 6. Message schema (observed, with the two requested fields)
+## 6. Message schema (observed, with itemId added)
 
 ```jsonc
 {
   "type": "pdv_alpss_result",
   "data": {
-    // --- requested additions ---
+    // --- requested addition ---
     "itemId": "665f…",                          // dedup key; matches REST item _id
-    "experiment_date": "2026-06-26T15:25:18Z",  // ISO 8601; when the shot was fired
 
     // --- already present ---
     "igsn": "JHABOX00000",
     "File Name": "C1--JHABOX00000_2026-06-26_15-25-18_shot16--00000.csv",
+                                                 // ↑ experiment_date is parsed from this
     "Velocity at Max Compression": 12.006,      // == METRICS[VELOCITY]["src"]
     "Spall Strength": NaN,                       // == METRICS[SPALL]["src"] (×1e-9)
     "Velocity OK": false, "Spall OK": false,     // flags; not used for plotting
@@ -131,6 +133,11 @@ Key alignment: the metric keys in `data` are exactly `METRICS[...]["src"]`
 is the same loop `parse_row` already runs — just reading from the message dict instead of
 a CSV row.
 
+`experiment_date` is derived from `File Name`, not sent: the `YYYY-MM-DD_HH-MM-SS` token
+(`2026-06-26_15-25-18` above) is the shot time. Parse it with the same rule as
+`girder-consumers/common/base.py` `parse_date` so it equals `meta.experiment_date` on the
+REST-seeded rows.
+
 ## 7. Client (notebook — to build)
 
 Refactor the notebook's fused `tick()` loop into the three seams from §3.
@@ -140,7 +147,9 @@ Refactor the notebook's fused `tick()` loop into the three seams from §3.
   - `itemId` ← `data["itemId"]` (dedup key; identical to the REST path's item `_id`)
   - `igsn` ← `data["igsn"]`
   - metrics ← same `spec["src"]` loop as `parse_row`
-  - `experiment_ts` ← `parse_experiment_ts(data["experiment_date"])`
+  - `experiment_ts` ← parse the `YYYY-MM-DD_HH-MM-SS` shot token out of
+    `data["File Name"]`, mirroring `girder-consumers/common/base.py` `parse_date`, then
+    `parse_experiment_ts`. Matches `meta.experiment_date` on REST-seeded rows.
   - `created` ← client receipt time (only a tiebreaker; the socket carries no Girder
     ingest time)
   - `arrival_seq` / `_jit` ← assigned by `Store._admit`, exactly as today
@@ -204,9 +213,10 @@ Phased so each step is independently useful:
    heartbeat. *Verify:* a real announcement renders within ~1–2 s; killing the socket and
    reconnecting backfills the gap; the same result over socket then `sync` is admitted
    once.
-4. **Confirm producer fields.** Once `itemId` + `experiment_date` are in the payload,
-   switch `row_from_notification` off the filename-derived fallbacks. *Verify:* dedup key
-   matches REST `_id`; windowing uses the shot time.
+4. **Confirm `itemId` in the payload.** Once `itemId` lands, key `Store.seen` on it across
+   both paths. *Verify:* a result seen over the socket and again in a `sync` is admitted
+   once (dedup key matches REST `_id`). `experiment_date` is filename-derived by design, no
+   producer dependency.
 5. **Cut poll cadence to fallback heartbeat.** Push is primary; polling is the safety net.
 
 Steps 1–2 land value before the socket work; step 3 works against the already-live
@@ -215,9 +225,9 @@ endpoint.
 ## 10. Open decisions
 
 - [ ] **Render library** (§7): Plotly vs Bokeh vs ipympl.
-- [ ] **Producer fields** (§4): `itemId` and `experiment_date` — requested; spec assumes
-      both. Filename-derived fallbacks are the contingency if `experiment_date` is not
-      added.
+- [x] **Producer fields** (§4): `itemId` will be added (dedup key). `experiment_date` will
+      *not* be added — derived in the notebook from `File Name`, matching how
+      `meta.experiment_date` is set upstream.
 - [ ] **Spec home** — kept in this repo (dashboard); producer change lives in
       `alpss-dagster`. Confirm this split.
 
