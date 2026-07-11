@@ -26,10 +26,10 @@ dashboard just needs to subscribe.
 Two properties of the real implementation shape the client:
 
 - **It's a *fat* notification.** The payload is the **entire ALPSS result row** (all
-  metrics, `igsn`, filename, OK-flags), not a thin doorbell. This is advantageous here
-  because the producer already holds that complete row — so there is *no extra producer
-  work* and the dashboard's **live path needs no fetch at all**: it builds a plot row
-  straight from the message.
+  metrics, `igsn`, filename, OK-flags), not a thin doorbell — so the dashboard's **live
+  path needs no fetch at all**: it builds a plot row straight from the message.
+- **It's triggered server-side on metadata mutation** of a `pdv_alpss_result` item (see
+  §4), not by an explicit publish call in the producer.
 - **It's a public firehose.** `/notifications/public` forwards all announcements;
   the client **filters by `message["type"] == "pdv_alpss_result"`**.
 
@@ -45,11 +45,10 @@ and the Girder `item_id` (`assets.py:194`) both exist.
 ## 3. Target architecture
 
 ```
-  ALPSS Dagster asset (PRODUCER)               [server side: implemented]
-    compute result row → upload → set data_type=pdv_alpss_result
-                        → publish full row (+ itemId, experiment_date) to Girder ws
-        │
-        ▼
+  ALPSS Dagster asset (PRODUCER)               [no code change expected]
+    compute result row → upload → addMetadataToItem(data_type=pdv_alpss_result, …)
+        │  metadata mutation triggers a Girder-side hook, which
+        ▼  assembles the full row (+ itemId, experiment_date) and publishes it
   Girder WebSocket  wss://girder.htmdec.org/notifications/public
         │  fans announcements out to authenticated subscribers
         ▼
@@ -68,13 +67,18 @@ almost none of the earlier polling work is wasted):
   used for seed and reconnect backfill. Built on `aimdl/partition?since=`.
 - **Render** — `Store` → incremental frame. Transport-agnostic.
 
-## 4. Producer (server side — implemented; two fields requested)
+## 4. Producer / trigger (server side — implemented, no code change expected)
 
-The producer publishes the full ALPSS result row to the Girder ws at the point the result
-is uploaded and classified `pdv_alpss_result` (Dagster job, `assets.py`, the `results`
-branch). This side is already working (observed in a live announcement).
+The announcement is emitted **server-side on metadata mutation of a `pdv_alpss_result`
+item** — confirmed by the test that editing an existing result item's metadata fires an
+announcement (§9). In normal operation the ALPSS Dagster job's existing
+`addMetadataToItem` call (`assets.py:196`) is the trigger, so **no code change to
+`alpss-dagster` is expected** (to confirm on a real run). Girder assembles the payload —
+the full ALPSS result row plus `itemId` and `experiment_date` — and publishes it. A
+notification failure is a Girder-side concern, decoupled from the upload; it cannot fail
+the asset.
 
-**Both requested fields are now in the payload** (confirmed in a live announcement):
+**Both fields we rely on are in the payload** (confirmed in a live announcement):
 
 - `itemId` — the Girder item id (e.g. `6a5101df6d1201b93e76daf8`). The **stable dedup key
   that matches the REST backfill path** (item `_id`), plus a convenience link.
@@ -89,8 +93,6 @@ branch). This side is already working (observed in a live announcement).
 
 Note the payload's `Date`/`Time` fields are when *ALPSS ran*, not the shot; do not use them
 for windowing (the clock trap in `src/aimdl_examples/live.py`).
-
-Failure isolation still applies on the producer: a publish error must never fail the asset.
 
 ## 5. Transport — Girder WebSocket (resolved)
 
@@ -201,6 +203,12 @@ throwaway is fast adaptive poll cadence, which degrades into the fallback heartb
 
 ## 9. Development plan (ordering)
 
+**Manual test trigger.** Editing metadata on any `pdv_alpss_result` item in the Girder UI
+(e.g. `https://girder.htmdec.org/#item/6a5101df6d1201b93e76daf8`) fires a real
+announcement. This drives client build/verification (phase 3) without waiting for a live
+shot or re-running Dagster; the client dedups by `itemId`, so re-poking the same item is
+harmless.
+
 Phased so each step is independently useful:
 
 1. **Client seams + render (this repo).** Refactor `tick()` into
@@ -215,7 +223,8 @@ Phased so each step is independently useful:
    heartbeat. *Verify:* a real announcement renders within ~1–2 s; killing the socket and
    reconnecting backfills the gap; the same result over socket then `sync` is admitted
    once.
-4. **Payload fields confirmed** (`itemId` + `experiment_date` both present). Key
+4. **Confirm end-to-end on a real run** — a live ALPSS shot should emit with **no
+   `alpss-dagster` code change** (the existing `addMetadataToItem` is the trigger). Key
    `Store.seen` on `itemId` across both paths. *Verify:* a result seen over the socket and
    again in a `sync` is admitted once (dedup matches REST `_id`), and its `experiment_ts`
    equals the REST row's (same `experiment_date` value).
@@ -230,16 +239,18 @@ endpoint.
 - [x] **Producer fields** (§4): both `itemId` and `experiment_date` are in the payload
       (confirmed live). Use `experiment_date` directly (== `meta.experiment_date`); ignore
       the fuller shot time in `File Name` to stay consistent with REST rows.
-- [ ] **Spec home** — kept in this repo (dashboard); producer change lives in
-      `alpss-dagster`. Confirm this split.
+- [ ] **Spec home** — kept in this repo (dashboard). Producer side appears to need no code
+      change (server-side metadata-mutation trigger); if any `alpss-dagster` tweak turns
+      out necessary it PRs there.
 
 ## 11. Non-goals / rejected alternatives
 
 - **Build our own notification relay** (rejected: Girder already runs the WebSocket and
   the producer already publishes to it).
-- **Server-side Girder event hook on item create** (rejected: server plugin code; the
-  producer already owns the emit and the full row. Revisit only to notify on
-  non-Dagster `pdv_alpss_result` uploads).
+- **Server-side Girder event hook** — *not* rejected; this is in fact what the sysadmin
+  implemented (the announcement fires on metadata mutation of a `pdv_alpss_result` item).
+  The upside: the Dagster job needs no publish call — its existing metadata write is the
+  trigger. Noted here to correct the earlier B1-vs-B2 framing.
 - **Thin doorbell + always-fetch** (superseded: the implementation is fat and the producer
   already holds the full row, so the live path is zero-fetch. Reconciliation via REST is
   still kept for seed/backfill — that part is unchanged).
