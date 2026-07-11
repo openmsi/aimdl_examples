@@ -17,226 +17,220 @@ Two consequences:
 We want new results to appear **within a second or two of upload**, without hammering the
 API, and with a smoother in-place render.
 
-## 2. Approach: publish to Girder's WebSocket from the producer (B1)
+## 2. Approach: subscribe to Girder's WebSocket announcements (B1, confirmed live)
 
-The Girder server **has a live WebSocket** for notifications. But Girder does not emit a
-notification on item creation by itself — *something has to publish one.* The producer of
-the result already knows the exact moment it lands and holds all the context, so it
-publishes the notification directly to Girder's notification API; the dashboard subscribes
-to Girder's WebSocket and updates.
+The Girder server runs a live WebSocket announcement stream, and the producer of each
+ALPSS result publishes to it. This is now **implemented and observed working** — the
+dashboard just needs to subscribe.
 
-`data_type: "pdv_alpss_result"` is set in the **ALPSS Dagster job**:
+Two properties of the real implementation shape the client:
 
-- `openmsi/alpss-dagster/alpss_dagster/assets.py:202`
-  `"data_type": "pdv_alpss_result" if output_name == "results" else "pdv_alpss_output"`
-- At that point the code already holds `item_id` (`assets.py:194`), `igsn`,
-  `experiment_date`, `context.run.run_id`, and an authenticated Girder client (`gc`).
+- **It's a *fat* notification.** The payload is the **entire ALPSS result row** (all
+  metrics, `igsn`, filename, OK-flags), not a thin doorbell. This is advantageous here
+  because the producer already holds that complete row — so there is *no extra producer
+  work* and the dashboard's **live path needs no fetch at all**: it builds a plot row
+  straight from the message.
+- **It's a public firehose.** `/notifications/public` forwards all announcements;
+  the client **filters by `message["type"] == "pdv_alpss_result"`**.
 
-So the emit is a few lines at the exact spot the result lands — a Girder API call, not a
-new service — and the client keeps a cheap server-side delta (`aimdl/partition?since=`) as
-its reconciliation layer.
+The REST path (`aimdl/partition?since=`, download, parse) does **not** go away — the
+WebSocket only pushes results *going forward*, so historical **seeding** and
+**reconnect/missed-message backfill** still use it. Live rows (from the socket) and
+backfill rows (from REST) must therefore share one dedup key — see §7.
 
-**Why B1 over the alternatives** (see §11): reusing Girder's running socket means **no
-relay to build, host, or operate**, and auth is handled by existing Girder tokens. A
-server-side Girder event hook (call it B2) would also work and would catch non-Dagster
-uploads too, but it is server plugin code to deploy; B1 is a few lines in a job we already
-own. Building our own relay adds a service for no benefit now that Girder can push.
+`data_type: "pdv_alpss_result"` originates in the ALPSS Dagster job
+(`openmsi/alpss-dagster/alpss_dagster/assets.py:202`), which is where the published row
+and the Girder `item_id` (`assets.py:194`) both exist.
 
 ## 3. Target architecture
 
 ```
-  ALPSS Dagster asset (PRODUCER)
-    upload result → set data_type=pdv_alpss_result
-                  → gc → publish notification to Girder  (fire-and-forget)
+  ALPSS Dagster asset (PRODUCER)               [server side: implemented]
+    compute result row → upload → set data_type=pdv_alpss_result
+                        → publish full row (+ itemId, experiment_date) to Girder ws
         │
         ▼
-  Girder WebSocket  ── fans the notification out to subscribed dashboards
-        │
+  Girder WebSocket  wss://girder.htmdec.org/notifications/public
+        │  fans announcements out to authenticated subscribers
         ▼
-  Notebook client (CONSUMER)
-    subscribe to Girder ws → on notification: sync(since) → Store.ingest → render
-                           → on (re)connect / periodic: sync(since) reconciliation
+  Notebook client (CONSUMER)                   [this repo: to build]
+    subscribe + auth → filter type==pdv_alpss_result
+      → row_from_notification(data) → Store.ingest → render      (live: zero fetch)
+      → on (re)connect / periodic heartbeat: sync(since) reconciliation (REST)
 ```
 
 Three seams, so the trigger can change without touching fetch or render (see §7 for why
 almost none of the earlier polling work is wasted):
 
-- **Trigger** — what says "new data exists." Poll timer *or* a Girder ws notification.
-- **`sync(since)`** — idempotent "fetch everything since my watermark, parse, ingest."
-  Shared by poll, notification, and reconnect. Built on `aimdl/partition?since=`.
+- **Trigger** — what says "new data exists." A Girder ws notification (primary) or the
+  fallback poll/heartbeat.
+- **`sync(since)`** — idempotent "fetch everything since my watermark, parse, ingest,"
+  used for seed and reconnect backfill. Built on `aimdl/partition?since=`.
 - **Render** — `Store` → incremental frame. Transport-agnostic.
 
-## 4. Component 1 — Producer (Dagster emit)
+## 4. Producer (server side — implemented; two fields requested)
 
-**Location:** `alpss-dagster/alpss_dagster/assets.py`, immediately after the
-`addMetadataToItem` block (~line 216), inside the per-output loop.
+The producer publishes the full ALPSS result row to the Girder ws at the point the result
+is uploaded and classified `pdv_alpss_result` (Dagster job, `assets.py`, the `results`
+branch). This side is already working (observed in a live announcement).
 
-**Gate:** `output_name == "results"` — this is exactly the `pdv_alpss_result` branch, so
-one notification fires per new plottable data point (not per shot, not per run).
+**Two additions requested of the producer** (both trivial — the values are already in
+scope at the emit site):
 
-**Emit — publish to Girder's notification API via the client already in hand:**
+- `itemId` — the Girder item id (`assets.py:194`). Gives the client a **stable dedup key
+  that matches the REST backfill path**, plus a convenience link. Without it we would have
+  to key on `File Name`, which is more fragile.
+- `experiment_date` — explicit ISO 8601 (`assets.py` `experiment_date`). The client
+  **windows on when the shot was fired**, and the payload's `Date`/`Time` fields are when
+  *ALPSS ran*, not the experiment (the exact clock trap documented in
+  `src/aimdl_examples/live.py`). Recoverable from the filename if absent, but cleaner as a
+  field.
 
-```python
-if output_name == "results":
-    try:
-        girder.publish_notification(              # thin wrapper over Girder's ws publish API
-            type="pdv_alpss_result.created",
-            data={
-                "itemId": item_id,
-                "igsn": igsn,
-                "experiment_date": experiment_date,
-                "runId": context.run.run_id,
-                "url": uploaded_urls[output_name],
-            },
-        )
-    except Exception as e:                          # never fail the asset on a notify error
-        context.log.warning("notify failed for %s: %s", item_id, e)
-```
+This spec assumes both land. Failure isolation still applies on the producer: a publish
+error must never fail the asset.
 
-**Requirements:**
+## 5. Transport — Girder WebSocket (resolved)
 
-- **Failure isolation.** A publish error must never fail or retry the asset. The
-  notification is best-effort; correctness is guaranteed by client-side reconciliation
-  (§8), not by delivery.
-- **No new blocking dependency.** Fire-and-forget with a short timeout; it must not slow
-  the upload loop.
-- **`publish_notification` is a thin method on the existing `GirderConnection` resource**
-  (`alpss_dagster/resources.py`), wrapping whatever Girder route/model publishes a
-  notification (§5, open item). It no-ops when unconfigured (local Dagster runs).
+- **Endpoint:** `wss://girder.htmdec.org/notifications/public` (confirmed). Note the
+  dashboard's REST base is `data.htmdec.org/api/v1`; same Girder, different hostname.
+- **Auth handshake:** open the socket, then send
+  `{"type": "auth", "token": <girder-token-id>}` as the first message. The notebook
+  already authenticates a `GirderClient` with its API key; reuse that client's token
+  (`gc.token`) — no separate exchange needed.
+- **Subscription/filter:** the stream is a public firehose; there is no server-side
+  per-type subscription. The client reads every message and keeps only
+  `msg["type"] == "pdv_alpss_result"`.
+- **Encoding:** messages are JSON text; the payload may contain bare `NaN` literals.
+  Python's `json.loads` accepts these (→ `float('nan')`), which the row builder already
+  treats as "no value." A stricter parser would need `parse_constant`.
 
-The exact Girder publish call is the one API detail still to confirm (§5). Everything else
-in the producer is settled. **Producer change ships as its own branch/PR in
-`alpss-dagster`**, not in this repo.
-
-## 5. Transport — Girder WebSocket notifications  *(chosen; API details to confirm)*
-
-Decision: **use Girder's existing WebSocket** (B1). No relay is built or hosted. What
-remains is to pin the concrete API against the running Girder 5.0.6 deployment — these do
-**not** block client phases 1–2, but must be answered before phases 3–4:
-
-- [ ] **Publish API** — the route/model the Dagster job calls to emit a notification
-      (e.g. an authenticated `gc.post(...)`), and its payload shape and size limits.
-- [ ] **Subscribe API** — how a client opens the ws and receives notifications: the ws
-      URL, the handshake/auth (Girder token via query param / header / subprotocol), and
-      any subscribe/filter message.
-- [ ] **Filtering & scoping** — can the client receive only `pdv_alpss_result.created`
-      (by type), and are notifications broadcast to the dashboard's identity or scoped
-      per-user? The dashboard's API-key user must actually receive them.
-- [ ] **Type string** — the canonical notification `type` used to publish and filter
-      (proposed: `pdv_alpss_result.created`).
-
-Owner: sysadmin who stood up the WebSocket. Note: the classic Girder `/notification`
-routes 404 on this deployment, so the publish/subscribe mechanism is whatever Girder 5
-exposes — get it from the sysadmin rather than assuming the older SSE model.
-
-## 6. Message schema (contract between producer and client)
+## 6. Message schema (observed, with the two requested fields)
 
 ```jsonc
 {
-  "type": "pdv_alpss_result.created",    // notification type; used to publish & filter
+  "type": "pdv_alpss_result",
   "data": {
-    "itemId": "665f…",                   // Girder item id of the results CSV
-    "igsn": "JHACRA00004-001",           // sample id (may be null)
-    "experiment_date": "2026-07-06T…",   // ISO 8601; may be null upstream
-    "runId": "…",                        // Dagster run id, for tracing
-    "url": "https://…/#item/665f…"       // convenience link
+    // --- requested additions ---
+    "itemId": "665f…",                          // dedup key; matches REST item _id
+    "experiment_date": "2026-06-26T15:25:18Z",  // ISO 8601; when the shot was fired
+
+    // --- already present ---
+    "igsn": "JHABOX00000",
+    "File Name": "C1--JHABOX00000_2026-06-26_15-25-18_shot16--00000.csv",
+    "Velocity at Max Compression": 12.006,      // == METRICS[VELOCITY]["src"]
+    "Spall Strength": NaN,                       // == METRICS[SPALL]["src"] (×1e-9)
+    "Velocity OK": false, "Spall OK": false,     // flags; not used for plotting
+    "Date": "Jun 29 2026", "Time": "05:14 PM",   // ALPSS RUN time — do NOT window on this
+    "…": "…"                                      // full ALPSS output row
   }
 }
 ```
 
-(Envelope shape — `type`/`data` vs. Girder's own notification wrapper — is finalized once
-§5's publish API is confirmed.)
+Key alignment: the metric keys in `data` are exactly `METRICS[...]["src"]`
+(`"Velocity at Max Compression"`, `"Spall Strength"`), so the client's metric extraction
+is the same loop `parse_row` already runs — just reading from the message dict instead of
+a CSV row.
 
-Notes:
-
-- **Doorbell, not payload.** The message carries enough to render *optimistically* (the
-  client can fetch just `itemId`), but the source of truth for "what have I got" remains
-  the client's own ingested set. The message is not required to be complete or ordered.
-- The client advances its reconciliation watermark from **what it has actually ingested**
-  (max item `created`), never from a field in the message — the message has no Girder
-  `created` timestamp (that's server-assigned after Dagster's hands are off).
-
-## 7. Component 2 — Client (notebook)
+## 7. Client (notebook — to build)
 
 Refactor the notebook's fused `tick()` loop into the three seams from §3.
 
-- **`sync(since)`** — replaces the current `count` + newest-first walk. Uses
-  `aimdl/partition?since=<watermark>` to get the changed partitions, fetches/parses their
-  new items, and calls `Store.ingest`. Idempotent: `Store.seen`/`itemId` dedup means
-  running it twice is harmless. This is the single fetch path.
-- **`GirderWebSocketSource`** — connects to Girder's ws with the dashboard's token, and:
+- **`row_from_notification(data)`** — new, small: build a `Store` row directly from a
+  notification's `data`, reusing the existing `METRICS`/scale logic for the metric fields.
+  - `itemId` ← `data["itemId"]` (dedup key; identical to the REST path's item `_id`)
+  - `igsn` ← `data["igsn"]`
+  - metrics ← same `spec["src"]` loop as `parse_row`
+  - `experiment_ts` ← `parse_experiment_ts(data["experiment_date"])`
+  - `created` ← client receipt time (only a tiebreaker; the socket carries no Girder
+    ingest time)
+  - `arrival_seq` / `_jit` ← assigned by `Store._admit`, exactly as today
+  No download, no CSV read on the live path.
+- **`sync(since)`** — the REST path, used for **seed** (startup) and **reconnect backfill**
+  only. Uses `aimdl/partition?since=<watermark>` for the delta, then the existing
+  download+`parse_row`+`Store.ingest`. Idempotent via `itemId` dedup. The single fetch
+  path.
+- **`GirderWebSocketSource`** — connects to `wss://girder.htmdec.org/notifications/public`,
+  sends the auth message, then:
   - on **connect**: `sync(since=last_ingested)` to backfill anything missed while
-    disconnected (this subsumes the current seed-on-start).
-  - on **notification** (`type == "pdv_alpss_result.created"`): `sync(since=last_ingested)`
-    (or fetch just `itemId` on the happy path), then `render`.
+    disconnected (subsumes the current seed-on-start).
+  - on **message** with `type == "pdv_alpss_result"`: `Store.ingest([row_from_notification(data)])`,
+    then `render`. (Zero fetch.)
   - on **disconnect**: reconnect with backoff; on reconnect, backfill via `sync`.
   - **fallback heartbeat**: a slow `sync` every N seconds (e.g. 60–120 s) as a safety net
-    for missed notifications. This is the *only* residue of polling, and it's deliberate.
-- **Render swap** — replace `savefig`→PNG→`Image.value` with an incremental widget.
-  Candidate libs and trade-offs to be settled in implementation (Plotly `FigureWidget`,
-  Bokeh `stream()` + `push_notebook()`, or ipympl). A box plot recomputes stats each
-  frame regardless, so the win is "no PNG round-trip + in-place repaint," not avoiding
-  recompute.
+    for missed announcements. This is the *only* residue of polling, and it's deliberate.
+- **Render swap** — replace `savefig`→PNG→`Image.value` with an incremental widget
+  (Plotly `FigureWidget`, Bokeh `stream()`+`push_notebook()`, or ipympl — decided at
+  implementation; §10). A box plot recomputes stats each frame regardless, so the win is
+  "no PNG round-trip + in-place repaint," not avoiding recompute.
+
+**Dedup across both paths is by `itemId`.** `Store.seen` already keys on it, so a result
+that arrives first over the socket and later shows up in a reconnect `sync` (or vice
+versa) is admitted once. This is exactly why the requested `itemId` field matters.
 
 **Why the earlier polling work is not wasted:** WebSockets are lossy (reconnects, dropped
 frames, sleeping kernels), so a "catch up since my watermark" fetch is mandatory *with or
-without* push. That fetch is `sync(since)` built on `partition?since=`. Girder's ws
-replaces only the **trigger**; `sync` and the entire render path carry over unchanged. The
-sole throwaway is fast adaptive poll cadence, which degrades into the fallback heartbeat.
+without* push. That fetch is `sync(since)` on `partition?since=`. The socket replaces only
+the **trigger** for the live path; `sync` and the entire render path carry over. The sole
+throwaway is fast adaptive poll cadence, which degrades into the fallback heartbeat.
 
 ## 8. Delivery semantics & correctness
 
-- **Best-effort delivery, exactly-correct state.** Notifications may be lost, duplicated,
+- **Best-effort delivery, exactly-correct state.** Announcements may be lost, duplicated,
   or arrive out of order. Correctness comes from idempotent `sync(since)` + `itemId`
   dedup, never from the socket.
-- **Dedup:** `Store.seen` already keys on `itemId`; a duplicated notification → duplicate
-  `sync` → no new rows. Safe.
+- **Dedup:** `Store.seen` keys on `itemId`; a duplicated announcement or a live/backfill
+  overlap → no double-count.
 - **Backfill on connect** guarantees a dashboard opened mid-run, or one that dropped, is
   consistent within one `sync`.
-- **Ordering:** `arrival_seq` in the store defines "new"; unaffected by socket ordering
-  because `sync` ingests in a deterministic order.
+- **Ordering:** `arrival_seq` defines "new"; unaffected by socket ordering because live
+  ingestion is single-threaded and `sync` ingests deterministically.
+- **Failed/low-quality results** are announced too (e.g. `Velocity OK: false`). The client
+  applies the same rule as `parse_row`: plot whatever ALPSS reports; a metric that is
+  `NaN` is simply absent from that metric's view.
 
 ## 9. Development plan (ordering)
 
-Phased so each step is independently useful and nothing blocks on the Girder ws API
-details (§5):
+Phased so each step is independently useful:
 
 1. **Client seams + render (this repo).** Refactor `tick()` into
-   `sync(since)` / trigger / render, and swap the render path. Immediate UX win, no
-   dependency on transport. *Verify:* notebook still updates correctly under the existing
-   poll trigger driving `sync`.
+   `sync(since)` / trigger / render and swap the render path. Immediate UX win, no
+   dependency on the socket. *Verify:* notebook still updates under a poll trigger driving
+   `sync`.
 2. **`partition?since=` in `sync` (this repo).** Replace `count` + walk with the delta
    query. *Verify:* new results appear; a forced-missed interval is recovered on next
    `sync`.
-3. **Confirm Girder ws API (§5) + `GirderWebSocketSource` (this repo).** Wire the client
-   subscribe/filter to Girder's ws. *Verify:* a hand-published `pdv_alpss_result.created`
-   notification reaches a connected notebook and triggers a `sync`.
-4. **Producer emit (`alpss-dagster`).** Add `girder.publish_notification(...)` on the
-   `results` branch, plus the `GirderConnection.publish_notification` wrapper. *Verify:* a
-   real ALPSS run drives a live update end-to-end; publish failure leaves the asset green.
-5. **Cut poll cadence to fallback heartbeat.** Push is now primary; polling is the safety
-   net.
+3. **`GirderWebSocketSource` + `row_from_notification` (this repo).** Subscribe, auth,
+   filter, ingest live rows with zero fetch; wire connect/reconnect backfill and the
+   heartbeat. *Verify:* a real announcement renders within ~1–2 s; killing the socket and
+   reconnecting backfills the gap; the same result over socket then `sync` is admitted
+   once.
+4. **Confirm producer fields.** Once `itemId` + `experiment_date` are in the payload,
+   switch `row_from_notification` off the filename-derived fallbacks. *Verify:* dedup key
+   matches REST `_id`; windowing uses the shot time.
+5. **Cut poll cadence to fallback heartbeat.** Push is primary; polling is the safety net.
 
-Steps 1–2 land value before any transport work; step 3 only needs the sysadmin's ws
-answers, not new infrastructure.
+Steps 1–2 land value before the socket work; step 3 works against the already-live
+endpoint.
 
 ## 10. Open decisions
 
-- [ ] **Girder ws API details** (§5): publish route, subscribe/handshake/auth, filtering,
-      type string — from the sysadmin.
 - [ ] **Render library** (§7): Plotly vs Bokeh vs ipympl.
-- [ ] **Spec home** — kept in this repo (dashboard) for now; producer change PRs into
+- [ ] **Producer fields** (§4): `itemId` and `experiment_date` — requested; spec assumes
+      both. Filename-derived fallbacks are the contingency if `experiment_date` is not
+      added.
+- [ ] **Spec home** — kept in this repo (dashboard); producer change lives in
       `alpss-dagster`. Confirm this split.
 
 ## 11. Non-goals / rejected alternatives
 
-- **Build our own notification relay** (rejected: Girder already runs a WebSocket; a
-  separate service is infrastructure for no benefit under B1).
-- **Server-side Girder event hook that fires on item create** (B2 — rejected for now: it
-  is server plugin code to deploy; the Dagster job already owns the emit and knows the
-  data_type. Revisit only if we need to notify on non-Dagster `pdv_alpss_result` uploads).
-- **Fat notifications** that stream full result payloads over the socket (rejected: more
-  producer work, still needs reconciliation; the doorbell + `sync` is simpler and robust).
+- **Build our own notification relay** (rejected: Girder already runs the WebSocket and
+  the producer already publishes to it).
+- **Server-side Girder event hook on item create** (rejected: server plugin code; the
+  producer already owns the emit and the full row. Revisit only to notify on
+  non-Dagster `pdv_alpss_result` uploads).
+- **Thin doorbell + always-fetch** (superseded: the implementation is fat and the producer
+  already holds the full row, so the live path is zero-fetch. Reconciliation via REST is
+  still kept for seed/backfill — that part is unchanged).
 - **Replacing polling entirely with no fallback** (rejected: the heartbeat is cheap
   insurance against lossy delivery).
 ```
