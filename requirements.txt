@@ -4,3 +4,5 @@ python-dotenv
 girder-client
 ipykernel
 matplotlib
+seaborn
+ipywidgets
