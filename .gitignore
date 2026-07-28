@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# HTMDEC_download.py -- API key files and downloaded data
+htmdec_api_key.txt
+.htmdec_api_key
+!htmdec_api_key.example.txt
+htmdec_data/
