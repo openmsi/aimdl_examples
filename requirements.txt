@@ -4,3 +4,4 @@ python-dotenv
 girder-client
 ipykernel
 matplotlib
+requests

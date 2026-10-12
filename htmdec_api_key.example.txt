@@ -1,0 +1,9 @@
+# Template for htmdec_api_key.txt -- copy this file, rename it to
+# htmdec_api_key.txt, and replace the line below with your own key.
+#
+#     cp htmdec_api_key.example.txt htmdec_api_key.txt
+#     chmod 600 htmdec_api_key.txt
+#
+# Get a key at data.htmdec.org -> account settings -> API keys.
+# htmdec_api_key.txt is gitignored -- never commit your real key.
+paste_your_girder_api_key_here
