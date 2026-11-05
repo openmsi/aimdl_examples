@@ -1,0 +1,535 @@
+igsn,experiment_date,title,title_source_igsn,matched_title,match_relation,xrd_item_count,pdv_item_count
+APLMAL00003,2026-08-12,Ti64 Etched Sample 1,APLMAL00003,Ti64 Etched Sample 1,exact,100,60
+APLMAL00006-001,2026-08-12,Titan23 Mech Polished - 001,APLMAL00006-001,Titan23 Mech Polished - 001,exact,50,0
+APLMAL00006-001,2026-08-18,Titan23 Mech Polished - 001,APLMAL00006-001,Titan23 Mech Polished - 001,exact,100,75
+APLMAL00006-002,2026-08-18,Titan23 Mech Polished - 002,APLMAL00006-002,Titan23 Mech Polished - 002,exact,100,72
+APLMAL00007-004,2026-08-12,Titan23 Mech Polish - 004,APLMAL00007-004,Titan23 Mech Polish - 004,exact,50,0
+APLMAL00007-004,2026-08-18,Titan23 Mech Polish - 004,APLMAL00007-004,Titan23 Mech Polish - 004,exact,100,63
+APLMAL00007-005,2026-08-12,Titan23 Mech Polish - 005,APLMAL00007-005,Titan23 Mech Polish - 005,exact,50,0
+APLMAL00007-005,2026-08-18,Titan23 Mech Polish - 005,APLMAL00007-005,Titan23 Mech Polish - 005,exact,100,75
+APLMEX00001,2026-09-30,AM CP-Ti DOE 1,APLMEX00001,AM CP-Ti DOE 1,exact,100,25
+APLMEX00001-001,2026-10-07,"AM CP-Ti DOE 1 - 001, 2-notch, one etched side one mirror side",APLMEX00001-001,"AM CP-Ti DOE 1 - 001, 2-notch, one etched side one mirror side",exact,100,25
+APLMEX00001-002,2026-10-07,"AM CP-Ti DOE 1 - 002, 3-notch, one etched side one mirror side",APLMEX00001-002,"AM CP-Ti DOE 1 - 002, 3-notch, one etched side one mirror side",exact,100,19
+APLMEX00001-003,2026-10-07,"AM CP-Ti DOE 1 - 003, 1-notch, one etched side one mirror side",APLMEX00001-003,"AM CP-Ti DOE 1 - 003, 1-notch, one etched side one mirror side",exact,100,25
+APLMEX00001-004,2026-10-07,"AM CP-Ti DOE 1 - 004,3-notch, one etched side one mirror side",APLMEX00001-004,"AM CP-Ti DOE 1 - 004,3-notch, one etched side one mirror side",exact,100,25
+APLMEX00001-005,2026-10-07,AM CP-Ti DOE 1 - 005,APLMEX00001-005,AM CP-Ti DOE 1 - 005,exact,100,1
+APLMEX00001-006,2026-10-07,AM CP-Ti DOE 1 - 006,APLMEX00001-006,AM CP-Ti DOE 1 - 006,exact,98,25
+APLMEX00001-007,2026-10-07,AM CP-Ti DOE 1 - 007,APLMEX00001-007,AM CP-Ti DOE 1 - 007,exact,100,25
+APLMEX00001-008,2026-10-07,AM CP-Ti DOE 1 - 008,APLMEX00001-008,AM CP-Ti DOE 1 - 008,exact,100,11
+JHAMAB00004,2025-10-14,Ti Foil,JHAMAB00004,Ti Foil,exact,200,0
+JHAMAC00001--S2R2C1--20251113--00001,2025-11-13,,JHAMAC00001,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils,child_of_title_match,0,3
+JHAMAC00001-S1R1C1,2026-02-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R1C1,JHAMAC00001-S1R1C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R1C1,exact,84,0
+JHAMAC00001-S1R1C1,2026-02-25,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R1C1,JHAMAC00001-S1R1C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R1C1,exact,82,0
+JHAMAC00001-S1R2C1,2025-11-07,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,JHAMAC00001-S1R2C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,exact,512,0
+JHAMAC00001-S1R2C1,2025-11-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,JHAMAC00001-S1R2C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,exact,76,0
+JHAMAC00001-S1R2C1,2025-11-12,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,JHAMAC00001-S1R2C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,exact,96,0
+JHAMAC00001-S1R2C1,2026-02-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,JHAMAC00001-S1R2C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,exact,82,0
+JHAMAC00001-S1R2C1,2026-02-25,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,JHAMAC00001-S1R2C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R2C1,exact,80,0
+JHAMAC00001-S1R3C1,2026-02-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R3C1,JHAMAC00001-S1R3C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R3C1,exact,82,0
+JHAMAC00001-S1R3C1,2026-02-25,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R3C1,JHAMAC00001-S1R3C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R3C1,exact,82,0
+JHAMAC00001-S1R4C1,2025-10-01,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,JHAMAC00001-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,exact,62,0
+JHAMAC00001-S1R4C1,2025-10-02,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,JHAMAC00001-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,exact,14,0
+JHAMAC00001-S1R4C1,2026-02-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,JHAMAC00001-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,exact,164,0
+JHAMAC00001-S1R4C1,2026-02-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,JHAMAC00001-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,exact,82,0
+JHAMAC00001-S1R4C1,2026-02-25,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,JHAMAC00001-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,exact,82,0
+JHAMAC00001-S1R4C1,2026-02-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,JHAMAC00001-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R4C1,exact,82,0
+JHAMAC00001-S1R5C1,2025-10-01,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,exact,62,0
+JHAMAC00001-S1R5C1,2025-10-02,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,exact,14,0
+JHAMAC00001-S1R5C1,2026-02-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,exact,82,0
+JHAMAC00001-S1R5C1,2026-02-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,exact,80,0
+JHAMAC00001-S1R5C1,2026-02-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,exact,82,0
+JHAMAC00001-S1R5C1,UNKNOWN_DATE,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,exact,1,0
+JHAMAC00001-S1R6C1,2025-08-11,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,JHAMAC00001-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,exact,0,15
+JHAMAC00001-S1R6C1,2025-10-01,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,JHAMAC00001-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,exact,62,0
+JHAMAC00001-S1R6C1,2025-10-02,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,JHAMAC00001-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,exact,14,0
+JHAMAC00001-S1R6C1,2026-02-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,JHAMAC00001-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,exact,82,0
+JHAMAC00001-S1R6C1,2026-02-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,JHAMAC00001-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,exact,82,0
+JHAMAC00001-S1R6C1,2026-02-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,JHAMAC00001-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,exact,82,0
+JHAMAC00001-S1R6C1,2026-02-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,JHAMAC00001-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R6C1,exact,82,0
+JHAMAC00001-S3R1C1,2025-09-25,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R1C1,JHAMAC00001-S3R1C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R1C1,exact,10,0
+JHAMAC00001-S3R1C1,2025-09-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R1C1,JHAMAC00001-S3R1C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R1C1,exact,62,0
+JHAMAC00001-S3R2C1,2025-09-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R2C1,JHAMAC00001-S3R2C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R2C1,exact,62,0
+JHAMAC00001-S3R3C1,2025-09-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R3C1,JHAMAC00001-S3R3C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R3C1,exact,62,0
+JHAMAC00001-S3R4C1,2025-09-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R4C1,JHAMAC00001-S3R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R4C1,exact,62,0
+JHAMAC00001-S3R5C1,2025-09-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R5C1,JHAMAC00001-S3R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R5C1,exact,62,0
+JHAMAC00001-S3R6C1,2025-09-25,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R6C1,JHAMAC00001-S3R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R6C1,exact,66,0
+JHAMAC00001-S3R6C1,2025-09-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R6C1,JHAMAC00001-S3R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R6C1,exact,2,0
+JHAMAC00001-S3R6C1,2025-09-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R6C1,JHAMAC00001-S3R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S3R6C1,exact,62,0
+JHAMAC00001-S8R3C2,2026-02-13,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S8R3C2,JHAMAC00001-S8R3C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S8R3C2,exact,0,28
+JHAMAC00003-S1R4C1,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C1,JHAMAC00003-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C1,exact,150,0
+JHAMAC00003-S1R4C1,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C1,JHAMAC00003-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C1,exact,150,0
+JHAMAC00003-S1R4C1,2026-06-09,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C1,JHAMAC00003-S1R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C1,exact,0,16
+JHAMAC00003-S1R4C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C2,JHAMAC00003-S1R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C2,exact,150,0
+JHAMAC00003-S1R4C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C2,JHAMAC00003-S1R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C2,exact,150,0
+JHAMAC00003-S1R4C2,2026-06-12,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C2,JHAMAC00003-S1R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C2,exact,0,15
+JHAMAC00003-S1R4C3,2026-01-28,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C3,JHAMAC00003-S1R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C3,exact,196,0
+JHAMAC00003-S1R4C3,2026-01-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C3,JHAMAC00003-S1R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C3,exact,82,0
+JHAMAC00003-S1R4C3,2026-02-18,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C3,JHAMAC00003-S1R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R4C3,exact,0,32
+JHAMAC00003-S1R5C1,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C1,JHAMAC00003-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C1,exact,150,0
+JHAMAC00003-S1R5C1,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C1,JHAMAC00003-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C1,exact,150,0
+JHAMAC00003-S1R5C1,2026-06-09,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C1,JHAMAC00003-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C1,exact,0,22
+JHAMAC00003-S1R5C2,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C2,JHAMAC00003-S1R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C2,exact,150,0
+JHAMAC00003-S1R5C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C2,JHAMAC00003-S1R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C2,exact,150,0
+JHAMAC00003-S1R5C2,2026-06-12,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C2,JHAMAC00003-S1R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C2,exact,0,13
+JHAMAC00003-S1R5C3,2026-01-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,JHAMAC00003-S1R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,exact,82,0
+JHAMAC00003-S1R5C3,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,JHAMAC00003-S1R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,exact,150,0
+JHAMAC00003-S1R5C3,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,JHAMAC00003-S1R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,exact,150,0
+JHAMAC00003-S1R5C3,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,JHAMAC00003-S1R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R5C3,exact,0,12
+JHAMAC00003-S1R6C1,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C1,JHAMAC00003-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C1,exact,150,0
+JHAMAC00003-S1R6C1,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C1,JHAMAC00003-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C1,exact,150,0
+JHAMAC00003-S1R6C1,2026-06-09,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C1,JHAMAC00003-S1R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C1,exact,0,18
+JHAMAC00003-S1R6C2,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C2,JHAMAC00003-S1R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C2,exact,150,0
+JHAMAC00003-S1R6C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C2,JHAMAC00003-S1R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C2,exact,150,0
+JHAMAC00003-S1R6C2,2026-06-12,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C2,JHAMAC00003-S1R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C2,exact,0,14
+JHAMAC00003-S1R6C3,2026-01-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C3,JHAMAC00003-S1R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C3,exact,82,0
+JHAMAC00003-S1R6C3,2026-02-18,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C3,JHAMAC00003-S1R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S1R6C3,exact,0,31
+JHAMAC00003-S2R2C1,2025-11-12,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S2R2C1,JHAMAC00003-S2R2C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S2R2C1,exact,96,0
+JHAMAC00003-S3R4C1,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C1,JHAMAC00003-S3R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C1,exact,150,0
+JHAMAC00003-S3R4C1,2026-06-08,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C1,JHAMAC00003-S3R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C1,exact,0,11
+JHAMAC00003-S3R4C2,2026-01-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C2,JHAMAC00003-S3R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C2,exact,82,0
+JHAMAC00003-S3R4C2,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C2,JHAMAC00003-S3R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C2,exact,150,0
+JHAMAC00003-S3R4C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C2,JHAMAC00003-S3R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R4C2,exact,0,20
+JHAMAC00003-S3R5C1,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C1,JHAMAC00003-S3R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C1,exact,150,0
+JHAMAC00003-S3R5C1,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C1,JHAMAC00003-S3R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C1,exact,150,0
+JHAMAC00003-S3R5C1,2026-06-08,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C1,JHAMAC00003-S3R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C1,exact,0,13
+JHAMAC00003-S3R5C2,2026-01-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,JHAMAC00003-S3R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,exact,82,0
+JHAMAC00003-S3R5C2,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,JHAMAC00003-S3R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,exact,150,0
+JHAMAC00003-S3R5C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,JHAMAC00003-S3R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,exact,150,0
+JHAMAC00003-S3R5C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,JHAMAC00003-S3R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R5C2,exact,0,16
+JHAMAC00003-S3R6C1,2026-05-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C1,JHAMAC00003-S3R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C1,exact,150,0
+JHAMAC00003-S3R6C1,2026-06-08,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C1,JHAMAC00003-S3R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C1,exact,0,10
+JHAMAC00003-S3R6C2,2026-05-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C2,JHAMAC00003-S3R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C2,exact,150,0
+JHAMAC00003-S3R6C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C2,JHAMAC00003-S3R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S3R6C2,exact,0,10
+JHAMAC00003-S4R4C1,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C1,JHAMAC00003-S4R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C1,exact,150,0
+JHAMAC00003-S4R4C1,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C1,JHAMAC00003-S4R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C1,exact,150,0
+JHAMAC00003-S4R4C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C1,JHAMAC00003-S4R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C1,exact,0,23
+JHAMAC00003-S4R4C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C2,JHAMAC00003-S4R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C2,exact,150,0
+JHAMAC00003-S4R4C2,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C2,JHAMAC00003-S4R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C2,exact,10,0
+JHAMAC00003-S4R4C2,2026-08-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C2,JHAMAC00003-S4R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C2,exact,100,42
+JHAMAC00003-S4R4C3,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,JHAMAC00003-S4R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,exact,140,0
+JHAMAC00003-S4R4C3,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,JHAMAC00003-S4R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,exact,150,0
+JHAMAC00003-S4R4C3,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,JHAMAC00003-S4R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,exact,10,0
+JHAMAC00003-S4R4C3,2026-08-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,JHAMAC00003-S4R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R4C3,exact,100,54
+JHAMAC00003-S4R5C1,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C1,JHAMAC00003-S4R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C1,exact,150,0
+JHAMAC00003-S4R5C1,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C1,JHAMAC00003-S4R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C1,exact,150,0
+JHAMAC00003-S4R5C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C1,JHAMAC00003-S4R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C1,exact,0,19
+JHAMAC00003-S4R5C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,JHAMAC00003-S4R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,exact,150,0
+JHAMAC00003-S4R5C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,JHAMAC00003-S4R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,exact,150,0
+JHAMAC00003-S4R5C2,2026-07-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,JHAMAC00003-S4R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,exact,10,0
+JHAMAC00003-S4R5C2,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,JHAMAC00003-S4R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C2,exact,0,13
+JHAMAC00003-S4R5C3,2026-02-18,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C3,JHAMAC00003-S4R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R5C3,exact,0,31
+JHAMAC00003-S4R6C1,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C1,JHAMAC00003-S4R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C1,exact,150,0
+JHAMAC00003-S4R6C1,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C1,JHAMAC00003-S4R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C1,exact,150,0
+JHAMAC00003-S4R6C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C1,JHAMAC00003-S4R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C1,exact,0,11
+JHAMAC00003-S4R6C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C2,JHAMAC00003-S4R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C2,exact,150,0
+JHAMAC00003-S4R6C2,2026-05-28,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C2,JHAMAC00003-S4R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C2,exact,150,0
+JHAMAC00003-S4R6C2,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C2,JHAMAC00003-S4R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C2,exact,0,11
+JHAMAC00003-S4R6C3,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,JHAMAC00003-S4R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,exact,150,0
+JHAMAC00003-S4R6C3,2026-05-28,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,JHAMAC00003-S4R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,exact,150,0
+JHAMAC00003-S4R6C3,2026-07-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,JHAMAC00003-S4R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,exact,10,0
+JHAMAC00003-S4R6C3,2026-07-13,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,JHAMAC00003-S4R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S4R6C3,exact,0,10
+JHAMAC00003-S6R4C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C2,JHAMAC00003-S6R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C2,exact,150,0
+JHAMAC00003-S6R4C2,2026-05-28,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C2,JHAMAC00003-S6R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C2,exact,150,0
+JHAMAC00003-S6R4C2,2026-06-12,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C2,JHAMAC00003-S6R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C2,exact,0,20
+JHAMAC00003-S6R4C3,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C3,JHAMAC00003-S6R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C3,exact,276,0
+JHAMAC00003-S6R4C3,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C3,JHAMAC00003-S6R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R4C3,exact,0,4
+JHAMAC00003-S6R5C1,2026-05-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C1,JHAMAC00003-S6R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C1,exact,150,0
+JHAMAC00003-S6R5C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C1,JHAMAC00003-S6R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C1,exact,0,8
+JHAMAC00003-S6R5C2,2026-05-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C2,JHAMAC00003-S6R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C2,exact,150,0
+JHAMAC00003-S6R5C2,2026-06-12,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C2,JHAMAC00003-S6R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C2,exact,0,17
+JHAMAC00003-S6R5C3,2026-05-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C3,JHAMAC00003-S6R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C3,exact,150,0
+JHAMAC00003-S6R5C3,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C3,JHAMAC00003-S6R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R5C3,exact,0,6
+JHAMAC00003-S6R6C1,2026-05-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C1,JHAMAC00003-S6R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C1,exact,150,0
+JHAMAC00003-S6R6C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C1,JHAMAC00003-S6R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C1,exact,0,15
+JHAMAC00003-S6R6C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C2,JHAMAC00003-S6R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C2,exact,150,0
+JHAMAC00003-S6R6C2,2026-06-11,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C2,JHAMAC00003-S6R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C2,exact,0,16
+JHAMAC00003-S6R6C3,2026-01-30,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C3,JHAMAC00003-S6R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C3,exact,82,0
+JHAMAC00003-S6R6C3,2026-02-05,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C3,JHAMAC00003-S6R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S6R6C3,exact,0,32
+JHAMAC00003-S7R4C1,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C1,JHAMAC00003-S7R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C1,exact,150,0
+JHAMAC00003-S7R4C1,2026-06-09,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C1,JHAMAC00003-S7R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C1,exact,0,22
+JHAMAC00003-S7R4C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,JHAMAC00003-S7R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,exact,150,0
+JHAMAC00003-S7R4C2,2026-05-28,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,JHAMAC00003-S7R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,exact,152,0
+JHAMAC00003-S7R4C2,2026-05-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,JHAMAC00003-S7R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,exact,150,0
+JHAMAC00003-S7R4C2,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,JHAMAC00003-S7R4C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C2,exact,0,12
+JHAMAC00003-S7R4C3,2026-01-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C3,JHAMAC00003-S7R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C3,exact,82,0
+JHAMAC00003-S7R4C3,2026-02-05,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C3,JHAMAC00003-S7R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R4C3,exact,0,35
+JHAMAC00003-S7R5C1,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C1,JHAMAC00003-S7R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C1,exact,150,0
+JHAMAC00003-S7R5C1,2026-06-09,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C1,JHAMAC00003-S7R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C1,exact,0,22
+JHAMAC00003-S7R5C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C2,JHAMAC00003-S7R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C2,exact,150,0
+JHAMAC00003-S7R5C2,2026-08-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C2,JHAMAC00003-S7R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C2,exact,100,72
+JHAMAC00003-S7R5C3,2026-01-30,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C3,JHAMAC00003-S7R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C3,exact,82,0
+JHAMAC00003-S7R5C3,2026-02-05,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C3,JHAMAC00003-S7R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R5C3,exact,0,37
+JHAMAC00003-S7R6C1,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C1,JHAMAC00003-S7R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C1,exact,150,0
+JHAMAC00003-S7R6C1,2026-06-09,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C1,JHAMAC00003-S7R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C1,exact,0,16
+JHAMAC00003-S7R6C2,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C2,JHAMAC00003-S7R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C2,exact,150,0
+JHAMAC00003-S7R6C2,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C2,JHAMAC00003-S7R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C2,exact,0,14
+JHAMAC00003-S7R6C3,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C3,JHAMAC00003-S7R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C3,exact,150,0
+JHAMAC00003-S7R6C3,2026-07-14,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C3,JHAMAC00003-S7R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C3,exact,10,0
+JHAMAC00003-S7R6C3,2026-08-26,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C3,JHAMAC00003-S7R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S7R6C3,exact,100,57
+JHAMAC00003-S8R4C1,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C1,JHAMAC00003-S8R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C1,exact,150,0
+JHAMAC00003-S8R4C1,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C1,JHAMAC00003-S8R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C1,exact,150,0
+JHAMAC00003-S8R4C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C1,JHAMAC00003-S8R4C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C1,exact,0,7
+JHAMAC00003-S8R4C3,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C3,JHAMAC00003-S8R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C3,exact,150,0
+JHAMAC00003-S8R4C3,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C3,JHAMAC00003-S8R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C3,exact,0,23
+JHAMAC00003-S8R4C3,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C3,JHAMAC00003-S8R4C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R4C3,exact,0,5
+JHAMAC00003-S8R5C1,2026-05-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C1,JHAMAC00003-S8R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C1,exact,150,0
+JHAMAC00003-S8R5C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C1,JHAMAC00003-S8R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C1,exact,0,9
+JHAMAC00003-S8R5C2,2026-05-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,JHAMAC00003-S8R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,exact,150,0
+JHAMAC00003-S8R5C2,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,JHAMAC00003-S8R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,exact,150,0
+JHAMAC00003-S8R5C2,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,JHAMAC00003-S8R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,exact,150,0
+JHAMAC00003-S8R5C2,2026-06-11,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,JHAMAC00003-S8R5C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C2,exact,0,7
+JHAMAC00003-S8R5C3,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C3,JHAMAC00003-S8R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C3,exact,300,0
+JHAMAC00003-S8R5C3,2026-05-22,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C3,JHAMAC00003-S8R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C3,exact,150,13
+JHAMAC00003-S8R5C3,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C3,JHAMAC00003-S8R5C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R5C3,exact,0,5
+JHAMAC00003-S8R6C1,2026-05-19,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C1,JHAMAC00003-S8R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C1,exact,150,0
+JHAMAC00003-S8R6C1,2026-06-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C1,JHAMAC00003-S8R6C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C1,exact,0,9
+JHAMAC00003-S8R6C2,2026-01-29,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,JHAMAC00003-S8R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,exact,82,0
+JHAMAC00003-S8R6C2,2026-05-20,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,JHAMAC00003-S8R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,exact,150,0
+JHAMAC00003-S8R6C2,2026-05-21,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,JHAMAC00003-S8R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,exact,150,0
+JHAMAC00003-S8R6C2,2026-06-11,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,JHAMAC00003-S8R6C2,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C2,exact,0,10
+JHAMAC00003-S8R6C3,2026-05-27,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C3,JHAMAC00003-S8R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C3,exact,150,0
+JHAMAC00003-S8R6C3,2026-07-10,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C3,JHAMAC00003-S8R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C3,exact,10,0
+JHAMAC00003-S8R6C3,2026-07-13,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C3,JHAMAC00003-S8R6C3,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils (2nd Batch) - S8R6C3,exact,0,9
+JHAMAI00001-S1R7C3-002-001,2026-07-03,Carburized - Combinatorial synthesis of 200 micron thick graded Ti-V foils (expected variation: 0-20at% V) - S1R7C3 - 002 - 001,JHAMAI00001-S1R7C3-002-001,Carburized - Combinatorial synthesis of 200 micron thick graded Ti-V foils (expected variation: 0-20at% V) - S1R7C3 - 002 - 001,exact,204,0
+JHAMAI00002-S4R4C0,2026-08-26,TiVNb-20260608 - S4R4C0,JHAMAI00002-S4R4C0,TiVNb-20260608 - S4R4C0,exact,100,75
+JHAMAI00002-S4R5C0,2026-08-26,TiVNb-20260608 - S4R5C0,JHAMAI00002-S4R5C0,TiVNb-20260608 - S4R5C0,exact,100,75
+JHAMAI00002-S4R6C0,2026-08-26,TiVNb-20260608 - S4R6C0,JHAMAI00002-S4R6C0,TiVNb-20260608 - S4R6C0,exact,100,72
+JHAMAI00002-S4R7C0,2026-08-26,TiVNb-20260608 - S4R7C0,JHAMAI00002-S4R7C0,TiVNb-20260608 - S4R7C0,exact,100,75
+JHAMAL00004-01,2026-04-15,Ti64 400 Microns McMaster Sheet - 01,JHAMAL00004-01,Ti64 400 Microns McMaster Sheet - 01,exact,100,9
+JHAMAL00004-02,2026-04-15,Ti64 400 Microns McMaster Sheet - 02,JHAMAL00004-02,Ti64 400 Microns McMaster Sheet - 02,exact,100,3
+JHAMAL00004-03,2026-04-15,Ti64 400 Microns McMaster Sheet - 03,JHAMAL00004-03,Ti64 400 Microns McMaster Sheet - 03,exact,100,8
+JHAMAL00004-03,2026-05-28,Ti64 400 Microns McMaster Sheet - 03,JHAMAL00004-03,Ti64 400 Microns McMaster Sheet - 03,exact,0,22
+JHAMAL00004-04,2026-04-15,Ti64 400 Microns McMaster Sheet - 04,JHAMAL00004-04,Ti64 400 Microns McMaster Sheet - 04,exact,100,15
+JHAMAL00004-05,2026-04-15,Ti64 400 Microns McMaster Sheet - 05,JHAMAL00004-05,Ti64 400 Microns McMaster Sheet - 05,exact,94,22
+JHAMAL00004-06,2026-04-15,Ti64 400 Microns McMaster Sheet - 06,JHAMAL00004-06,Ti64 400 Microns McMaster Sheet - 06,exact,50,19
+JHAMAL00004-07,2026-04-15,Ti64 400 Microns McMaster Sheet - 07,JHAMAL00004-07,Ti64 400 Microns McMaster Sheet - 07,exact,50,22
+JHAMAL00004-08,2026-04-15,Ti64 400 Microns McMaster Sheet - 08,JHAMAL00004-08,Ti64 400 Microns McMaster Sheet - 08,exact,50,20
+JHAMAL00004-09,2026-04-21,Ti64 400 Microns McMaster Sheet - 09,JHAMAL00004-09,Ti64 400 Microns McMaster Sheet - 09,exact,20,0
+JHAMAL00004-09,2026-05-28,Ti64 400 Microns McMaster Sheet - 09,JHAMAL00004-09,Ti64 400 Microns McMaster Sheet - 09,exact,0,24
+JHAMAL00004-10,2026-04-21,Ti64 400 Microns McMaster Sheet - 10,JHAMAL00004-10,Ti64 400 Microns McMaster Sheet - 10,exact,20,0
+JHAMAL00004-18,2026-04-13,Ti64 400 Microns McMaster Sheet - 18,JHAMAL00004-18,Ti64 400 Microns McMaster Sheet - 18,exact,0,25
+JHAMAL00004-19,2026-03-31,Ti64 400 Microns McMaster Sheet - 19,JHAMAL00004-19,Ti64 400 Microns McMaster Sheet - 19,exact,0,21
+JHAMAL00016-001,2026-04-06,"Commercially pure, grade 2 titanium  - 001",JHAMAL00016-001,"Commercially pure, grade 2 titanium  - 001",exact,0,24
+JHAMAL00016-002,2026-04-09,"Commercially pure, grade 2 titanium  - 002",JHAMAL00016-002,"Commercially pure, grade 2 titanium  - 002",exact,0,4
+JHAMAL00016-002,2026-04-13,"Commercially pure, grade 2 titanium  - 002",JHAMAL00016-002,"Commercially pure, grade 2 titanium  - 002",exact,0,46
+JHAMAL00016-002,2026-04-15,"Commercially pure, grade 2 titanium  - 002",JHAMAL00016-002,"Commercially pure, grade 2 titanium  - 002",exact,50,25
+JHAMAL00016-003,2026-04-13,"Commercially pure, grade 2 titanium  - 003",JHAMAL00016-003,"Commercially pure, grade 2 titanium  - 003",exact,0,6
+JHAMAL00016-004,2026-04-15,"Commercially pure, grade 2 titanium  - 004",JHAMAL00016-004,"Commercially pure, grade 2 titanium  - 004",exact,50,19
+JHAMAL00016-004,2026-04-23,"Commercially pure, grade 2 titanium  - 004",JHAMAL00016-004,"Commercially pure, grade 2 titanium  - 004",exact,0,25
+JHAMAL00016-005,2026-04-15,"Commercially pure, grade 2 titanium  - 005",JHAMAL00016-005,"Commercially pure, grade 2 titanium  - 005",exact,50,24
+JHAMAL00016-005,2026-04-23,"Commercially pure, grade 2 titanium  - 005",JHAMAL00016-005,"Commercially pure, grade 2 titanium  - 005",exact,0,25
+JHAMAL00016-006,2026-04-15,"Commercially pure, grade 2 titanium  - 006",JHAMAL00016-006,"Commercially pure, grade 2 titanium  - 006",exact,102,0
+JHAMAL00016-006,2026-04-16,"Commercially pure, grade 2 titanium  - 006",JHAMAL00016-006,"Commercially pure, grade 2 titanium  - 006",exact,52,19
+JHAMAL00016-007,2026-04-15,"Commercially pure, grade 2 titanium  - 007",JHAMAL00016-007,"Commercially pure, grade 2 titanium  - 007",exact,102,0
+JHAMAL00016-007,2026-04-16,"Commercially pure, grade 2 titanium  - 007",JHAMAL00016-007,"Commercially pure, grade 2 titanium  - 007",exact,52,25
+JHAMAL00016-008,2026-04-15,"Commercially pure, grade 2 titanium  - 008",JHAMAL00016-008,"Commercially pure, grade 2 titanium  - 008",exact,102,0
+JHAMAL00016-008,2026-04-30,"Commercially pure, grade 2 titanium  - 008",JHAMAL00016-008,"Commercially pure, grade 2 titanium  - 008",exact,0,21
+JHAMAL00016-008,UNKNOWN_DATE,"Commercially pure, grade 2 titanium  - 008",JHAMAL00016-008,"Commercially pure, grade 2 titanium  - 008",exact,1,0
+JHAMAL00016-009,2026-04-15,"Commercially pure, grade 2 titanium  - 009",JHAMAL00016-009,"Commercially pure, grade 2 titanium  - 009",exact,0,9
+JHAMAL00016-009,2026-04-30,"Commercially pure, grade 2 titanium  - 009",JHAMAL00016-009,"Commercially pure, grade 2 titanium  - 009",exact,0,25
+JHAMAL00016-010,2026-04-30,"Commercially pure, grade 2 titanium  - 010",JHAMAL00016-010,"Commercially pure, grade 2 titanium  - 010",exact,0,12
+JHAMAL00016-011,2026-04-30,"Commercially pure, grade 2 titanium  - 011",JHAMAL00016-011,"Commercially pure, grade 2 titanium  - 011",exact,0,6
+JHAMAL00016-012,2026-04-30,"Commercially pure, grade 2 titanium  - 012",JHAMAL00016-012,"Commercially pure, grade 2 titanium  - 012",exact,0,4
+JHAMAL00016-013,2026-04-30,"Commercially pure, grade 2 titanium  - 013",JHAMAL00016-013,"Commercially pure, grade 2 titanium  - 013",exact,0,45
+JHAMAL00016-014,2026-07-10,"Commercially pure, grade 2 titanium  - 014",JHAMAL00016-014,"Commercially pure, grade 2 titanium  - 014",exact,10,25
+JHAMAL00016-015,2026-06-29,"Commercially pure, grade 2 titanium  - 015",JHAMAL00016-015,"Commercially pure, grade 2 titanium  - 015",exact,0,39
+JHAMAL00016-016,2026-07-10,"Commercially pure, grade 2 titanium  - 016",JHAMAL00016-016,"Commercially pure, grade 2 titanium  - 016",exact,10,7
+JHAMAL00016-017,2026-07-10,"Commercially pure, grade 2 titanium  - 017",JHAMAL00016-017,"Commercially pure, grade 2 titanium  - 017",exact,10,10
+JHAMAL00016-018,2026-04-21,"Commercially pure, grade 2 titanium  - 018",JHAMAL00016-018,"Commercially pure, grade 2 titanium  - 018",exact,20,0
+JHAMAL00016-018,2026-07-10,"Commercially pure, grade 2 titanium  - 018",JHAMAL00016-018,"Commercially pure, grade 2 titanium  - 018",exact,10,0
+JHAMAL00016-018,2026-07-13,"Commercially pure, grade 2 titanium  - 018",JHAMAL00016-018,"Commercially pure, grade 2 titanium  - 018",exact,0,22
+JHAMAL00016-019,2026-04-21,"Commercially pure, grade 2 titanium  - 019",JHAMAL00016-019,"Commercially pure, grade 2 titanium  - 019",exact,20,0
+JHAMAL00016-019,2026-06-29,"Commercially pure, grade 2 titanium  - 019",JHAMAL00016-019,"Commercially pure, grade 2 titanium  - 019",exact,0,43
+JHAMAL00016-020,2026-06-10,"Commercially pure, grade 2 titanium  - 020",JHAMAL00016-020,"Commercially pure, grade 2 titanium  - 020",exact,0,25
+JHAMAL00016-021,2026-06-10,"Commercially pure, grade 2 titanium  - 021",JHAMAL00016-021,"Commercially pure, grade 2 titanium  - 021",exact,0,25
+JHAMAL00016-022,2026-06-10,"Commercially pure, grade 2 titanium  - 022",JHAMAL00016-022,"Commercially pure, grade 2 titanium  - 022",exact,0,25
+JHAMAL00016-023,2026-07-10,"Commercially pure, grade 2 titanium  - 023",JHAMAL00016-023,"Commercially pure, grade 2 titanium  - 023",exact,10,0
+JHAMAL00016-023,2026-07-13,"Commercially pure, grade 2 titanium  - 023",JHAMAL00016-023,"Commercially pure, grade 2 titanium  - 023",exact,10,22
+JHAMAL00016-024,2026-07-10,"Commercially pure, grade 2 titanium  - 024",JHAMAL00016-024,"Commercially pure, grade 2 titanium  - 024",exact,10,0
+JHAMAL00016-024,2026-07-13,"Commercially pure, grade 2 titanium  - 024",JHAMAL00016-024,"Commercially pure, grade 2 titanium  - 024",exact,10,25
+JHAMAL00016-025,2026-07-22,"Commercially pure, grade 2 titanium  - 025",JHAMAL00016-025,"Commercially pure, grade 2 titanium  - 025",exact,20,25
+JHAMAL00016-025,2026-09-24,"Commercially pure, grade 2 titanium  - 025",JHAMAL00016-025,"Commercially pure, grade 2 titanium  - 025",exact,0,8
+JHAMAL00016-026,2026-07-22,"Commercially pure, grade 2 titanium  - 026",JHAMAL00016-026,"Commercially pure, grade 2 titanium  - 026",exact,20,24
+JHAMAL00016-027,2026-07-13,"Commercially pure, grade 2 titanium  - 027",JHAMAL00016-027,"Commercially pure, grade 2 titanium  - 027",exact,10,0
+JHAMAL00016-027,2026-07-14,"Commercially pure, grade 2 titanium  - 027",JHAMAL00016-027,"Commercially pure, grade 2 titanium  - 027",exact,10,0
+JHAMAL00016-031,2026-07-13,"Commercially pure, grade 2 titanium  - 031",JHAMAL00016-031,"Commercially pure, grade 2 titanium  - 031",exact,10,22
+JHAMAL00016-032,2026-07-13,"Commercially pure, grade 2 titanium  - 032",JHAMAL00016-032,"Commercially pure, grade 2 titanium  - 032",exact,10,24
+JHAMAL00016-033,2026-07-14,"Commercially pure, grade 2 titanium  - 033",JHAMAL00016-033,"Commercially pure, grade 2 titanium  - 033",exact,10,13
+JHAMAL00016-034,2026-07-14,"Commercially pure, grade 2 titanium  - 034",JHAMAL00016-034,"Commercially pure, grade 2 titanium  - 034",exact,10,18
+JHAMAL00016-035,2026-07-14,"Commercially pure, grade 2 titanium  - 035",JHAMAL00016-035,"Commercially pure, grade 2 titanium  - 035",exact,10,18
+JHAMAL00016-036,2026-07-14,"Commercially pure, grade 2 titanium  - 036",JHAMAL00016-036,"Commercially pure, grade 2 titanium  - 036",exact,10,24
+JHAMAL00016-037,2026-07-14,"Commercially pure, grade 2 titanium  - 037",JHAMAL00016-037,"Commercially pure, grade 2 titanium  - 037",exact,10,21
+JHAMAL00016-038,2026-07-14,"Commercially pure, grade 2 titanium  - 038",JHAMAL00016-038,"Commercially pure, grade 2 titanium  - 038",exact,10,1
+JHAMAL00016-039,2026-07-14,"Commercially pure, grade 2 titanium  - 039",JHAMAL00016-039,"Commercially pure, grade 2 titanium  - 039",exact,0,5
+JHAMAL00016-040,2026-07-14,"Commercially pure, grade 2 titanium  - 040",JHAMAL00016-040,"Commercially pure, grade 2 titanium  - 040",exact,0,15
+JHAMAL00016-041,2026-07-29,"Commercially pure, grade 2 titanium  - 041",JHAMAL00016-041,"Commercially pure, grade 2 titanium  - 041",exact,0,25
+JHAMAL00016-042,2026-07-29,"Commercially pure, grade 2 titanium  - 042",JHAMAL00016-042,"Commercially pure, grade 2 titanium  - 042",exact,0,10
+JHAMAL00016-043,2026-07-29,"Commercially pure, grade 2 titanium  - 043",JHAMAL00016-043,"Commercially pure, grade 2 titanium  - 043",exact,0,3
+JHAMAL00016-044,2026-07-29,"Commercially pure, grade 2 titanium  - 044",JHAMAL00016-044,"Commercially pure, grade 2 titanium  - 044",exact,0,24
+JHAMAL00016-045,2026-07-22,"Commercially pure, grade 2 titanium  - 045",JHAMAL00016-045,"Commercially pure, grade 2 titanium  - 045",exact,20,24
+JHAMAL00016-046,2026-07-22,"Commercially pure, grade 2 titanium  - 046",JHAMAL00016-046,"Commercially pure, grade 2 titanium  - 046",exact,20,4
+JHAMAL00016-047,2026-07-29,"Commercially pure, grade 2 titanium  - 047",JHAMAL00016-047,"Commercially pure, grade 2 titanium  - 047",exact,0,20
+JHAMAL00016-048,2026-08-05,"Commercially pure, grade 2 titanium  - 048",JHAMAL00016-048,"Commercially pure, grade 2 titanium  - 048",exact,100,25
+JHAMAL00016-049,2026-08-05,"Commercially pure, grade 2 titanium  - 049",JHAMAL00016-049,"Commercially pure, grade 2 titanium  - 049",exact,100,24
+JHAMAL00016-050,2026-08-12,"Commercially pure, grade 2 titanium  - 050",JHAMAL00016-050,"Commercially pure, grade 2 titanium  - 050",exact,100,0
+JHAMAL00016-050,2026-09-24,"Commercially pure, grade 2 titanium  - 050",JHAMAL00016-050,"Commercially pure, grade 2 titanium  - 050",exact,0,5
+JHAMAL00016-051,2026-07-13,"Commercially pure, grade 2 titanium  - 051",JHAMAL00016-051,"Commercially pure, grade 2 titanium  - 051",exact,10,0
+JHAMAL00016-051,2026-07-22,"Commercially pure, grade 2 titanium  - 051",JHAMAL00016-051,"Commercially pure, grade 2 titanium  - 051",exact,20,22
+JHAMAL00016-052,2026-08-05,"Commercially pure, grade 2 titanium  - 052",JHAMAL00016-052,"Commercially pure, grade 2 titanium  - 052",exact,100,13
+JHAMAL00016-053,2026-08-12,"Commercially pure, grade 2 titanium  - 053",JHAMAL00016-053,"Commercially pure, grade 2 titanium  - 053",exact,100,75
+JHAMAL00016-054,2026-09-24,"Commercially pure, grade 2 titanium  - 054",JHAMAL00016-054,"Commercially pure, grade 2 titanium  - 054",exact,0,25
+JHAMAL00016-055,2026-08-12,"Commercially pure, grade 2 titanium  - 055",JHAMAL00016-055,"Commercially pure, grade 2 titanium  - 055",exact,100,69
+JHAMAL00016-056,2026-09-24,"Commercially pure, grade 2 titanium  - 056",JHAMAL00016-056,"Commercially pure, grade 2 titanium  - 056",exact,0,25
+JHAMAL00016-057,2026-07-14,"Commercially pure, grade 2 titanium  - 057",JHAMAL00016-057,"Commercially pure, grade 2 titanium  - 057",exact,10,0
+JHAMAL00016-057,2026-09-24,"Commercially pure, grade 2 titanium  - 057",JHAMAL00016-057,"Commercially pure, grade 2 titanium  - 057",exact,0,8
+JHAMAL00016-058,2026-07-14,"Commercially pure, grade 2 titanium  - 058",JHAMAL00016-058,"Commercially pure, grade 2 titanium  - 058",exact,10,0
+JHAMAL00016-058,2026-09-24,"Commercially pure, grade 2 titanium  - 058",JHAMAL00016-058,"Commercially pure, grade 2 titanium  - 058",exact,0,25
+JHAMAL00016-059,2026-07-14,"Commercially pure, grade 2 titanium  - 059",JHAMAL00016-059,"Commercially pure, grade 2 titanium  - 059",exact,10,0
+JHAMAL00016-059,2026-07-29,"Commercially pure, grade 2 titanium  - 059",JHAMAL00016-059,"Commercially pure, grade 2 titanium  - 059",exact,0,25
+JHAMAL00016-060,2026-07-14,"Commercially pure, grade 2 titanium  - 060",JHAMAL00016-060,"Commercially pure, grade 2 titanium  - 060",exact,10,0
+JHAMAL00016-060,2026-09-24,"Commercially pure, grade 2 titanium  - 060",JHAMAL00016-060,"Commercially pure, grade 2 titanium  - 060",exact,0,25
+JHAMAL00016-061,2026-07-14,"Commercially pure, grade 2 titanium  - 061",JHAMAL00016-061,"Commercially pure, grade 2 titanium  - 061",exact,10,0
+JHAMAL00016-061,2026-09-24,"Commercially pure, grade 2 titanium  - 061",JHAMAL00016-061,"Commercially pure, grade 2 titanium  - 061",exact,0,18
+JHAMAL00016-062,2026-09-24,"Commercially pure, grade 2 titanium  - 062",JHAMAL00016-062,"Commercially pure, grade 2 titanium  - 062",exact,0,25
+JHAMAL00016-063,2026-07-14,"Commercially pure, grade 2 titanium  - 063",JHAMAL00016-063,"Commercially pure, grade 2 titanium  - 063",exact,0,22
+JHAMAL00016-064,2026-09-24,"Commercially pure, grade 2 titanium  - 064",JHAMAL00016-064,"Commercially pure, grade 2 titanium  - 064",exact,0,25
+JHAMAL00016-065,2026-07-22,"Commercially pure, grade 2 titanium  - 065",JHAMAL00016-065,"Commercially pure, grade 2 titanium  - 065",exact,20,23
+JHAMAL00016-066,2026-07-22,"Commercially pure, grade 2 titanium  - 066",JHAMAL00016-066,"Commercially pure, grade 2 titanium  - 066",exact,20,24
+JHAMAL00016-067,2026-07-22,"Commercially pure, grade 2 titanium  - 067",JHAMAL00016-067,"Commercially pure, grade 2 titanium  - 067",exact,20,24
+JHAMAL00016-068,2026-07-22,"Commercially pure, grade 2 titanium  - 068",JHAMAL00016-068,"Commercially pure, grade 2 titanium  - 068",exact,20,0
+JHAMAL00016-068,2026-08-05,"Commercially pure, grade 2 titanium  - 068",JHAMAL00016-068,"Commercially pure, grade 2 titanium  - 068",exact,100,24
+JHAMAL00016-069,2026-07-22,"Commercially pure, grade 2 titanium  - 069",JHAMAL00016-069,"Commercially pure, grade 2 titanium  - 069",exact,20,25
+JHAMAL00016-070,2026-08-05,"Commercially pure, grade 2 titanium  - 070",JHAMAL00016-070,"Commercially pure, grade 2 titanium  - 070",exact,100,25
+JHAMAL00016-071,2026-07-14,"Commercially pure, grade 2 titanium  - 071",JHAMAL00016-071,"Commercially pure, grade 2 titanium  - 071",exact,10,0
+JHAMAL00016-071,2026-09-24,"Commercially pure, grade 2 titanium  - 071",JHAMAL00016-071,"Commercially pure, grade 2 titanium  - 071",exact,0,16
+JHAMAL00016-072,2026-07-14,"Commercially pure, grade 2 titanium  - 072",JHAMAL00016-072,"Commercially pure, grade 2 titanium  - 072",exact,10,0
+JHAMAL00016-073,2026-07-14,"Commercially pure, grade 2 titanium  - 073",JHAMAL00016-073,"Commercially pure, grade 2 titanium  - 073",exact,10,0
+JHAMAL00016-073,2026-09-24,"Commercially pure, grade 2 titanium  - 073",JHAMAL00016-073,"Commercially pure, grade 2 titanium  - 073",exact,0,16
+JHAMAL00016-074,2026-07-14,"Commercially pure, grade 2 titanium  - 074",JHAMAL00016-074,"Commercially pure, grade 2 titanium  - 074",exact,10,0
+JHAMAL00016-074,2026-07-22,"Commercially pure, grade 2 titanium  - 074",JHAMAL00016-074,"Commercially pure, grade 2 titanium  - 074",exact,20,19
+JHAMAL00016-075,2026-07-14,"Commercially pure, grade 2 titanium  - 075",JHAMAL00016-075,"Commercially pure, grade 2 titanium  - 075",exact,10,0
+JHAMAL00016-075,2026-07-22,"Commercially pure, grade 2 titanium  - 075",JHAMAL00016-075,"Commercially pure, grade 2 titanium  - 075",exact,20,23
+JHAMAL00016-076,2026-07-14,"Commercially pure, grade 2 titanium  - 076",JHAMAL00016-076,"Commercially pure, grade 2 titanium  - 076",exact,10,0
+JHAMAL00016-077,2026-07-14,"Commercially pure, grade 2 titanium  - 077",JHAMAL00016-077,"Commercially pure, grade 2 titanium  - 077",exact,10,0
+JHAMAL00016-078,2026-07-14,"Commercially pure, grade 2 titanium  - 078",JHAMAL00016-078,"Commercially pure, grade 2 titanium  - 078",exact,10,0
+JHAMAL00016-079,2026-07-14,"Commercially pure, grade 2 titanium  - 079",JHAMAL00016-079,"Commercially pure, grade 2 titanium  - 079",exact,10,0
+JHAMAL00016-080,2026-07-14,"Commercially pure, grade 2 titanium  - 080",JHAMAL00016-080,"Commercially pure, grade 2 titanium  - 080",exact,10,0
+JHAMAL00016-080,2026-08-12,"Commercially pure, grade 2 titanium  - 080",JHAMAL00016-080,"Commercially pure, grade 2 titanium  - 080",exact,100,72
+JHAMAL00016-081,2026-07-14,"Commercially pure, grade 2 titanium  - 081",JHAMAL00016-081,"Commercially pure, grade 2 titanium  - 081",exact,10,0
+JHAMAL00016-082,2026-07-14,"Commercially pure, grade 2 titanium  - 082",JHAMAL00016-082,"Commercially pure, grade 2 titanium  - 082",exact,10,0
+JHAMAL00016-082,2026-08-12,"Commercially pure, grade 2 titanium  - 082",JHAMAL00016-082,"Commercially pure, grade 2 titanium  - 082",exact,100,75
+JHAMAL00016-083,2026-07-14,"Commercially pure, grade 2 titanium  - 083",JHAMAL00016-083,"Commercially pure, grade 2 titanium  - 083",exact,10,0
+JHAMAL00016-084,2026-07-14,"Commercially pure, grade 2 titanium  - 084",JHAMAL00016-084,"Commercially pure, grade 2 titanium  - 084",exact,10,0
+JHAMAL00016-084,2026-08-05,"Commercially pure, grade 2 titanium  - 084",JHAMAL00016-084,"Commercially pure, grade 2 titanium  - 084",exact,100,25
+JHAMAL00016-102,2026-08-07,"Commercially pure, grade 2 titanium  - 102",JHAMAL00016-102,"Commercially pure, grade 2 titanium  - 102",exact,0,27
+JHAMAL00018-001,2026-04-15,Grade 5 titanium  - 001,JHAMAL00018-001,Grade 5 titanium  - 001,exact,49,18
+JHAMAL00018-001,UNKNOWN_DATE,Grade 5 titanium  - 001,JHAMAL00018-001,Grade 5 titanium  - 001,exact,1,0
+JHAMAL00018-002,2026-04-13,Grade 5 titanium  - 002,JHAMAL00018-002,Grade 5 titanium  - 002,exact,0,16
+JHAMAL00018-003,2026-04-15,Grade 5 titanium  - 003,JHAMAL00018-003,Grade 5 titanium  - 003,exact,50,8
+JHAMAL00018-004,2026-04-15,Grade 5 titanium  - 004,JHAMAL00018-004,Grade 5 titanium  - 004,exact,50,16
+JHAMAL00018-004,2026-04-16,Grade 5 titanium  - 004,JHAMAL00018-004,Grade 5 titanium  - 004,exact,52,21
+JHAMAL00018-005,2026-04-15,Grade 5 titanium  - 005,JHAMAL00018-005,Grade 5 titanium  - 005,exact,50,17
+JHAMAL00018-005,2026-04-16,Grade 5 titanium  - 005,JHAMAL00018-005,Grade 5 titanium  - 005,exact,52,15
+JHAMAL00018-006,2026-04-15,Grade 5 titanium  - 006,JHAMAL00018-006,Grade 5 titanium  - 006,exact,50,22
+JHAMAL00018-006,2026-04-16,Grade 5 titanium  - 006,JHAMAL00018-006,Grade 5 titanium  - 006,exact,52,0
+JHAMAL00018-006,2026-04-21,Grade 5 titanium  - 006,JHAMAL00018-006,Grade 5 titanium  - 006,exact,40,0
+JHAMAL00018-006,2026-04-30,Grade 5 titanium  - 006,JHAMAL00018-006,Grade 5 titanium  - 006,exact,0,22
+JHAMAL00018-007,2026-04-15,Grade 5 titanium  - 007,JHAMAL00018-007,Grade 5 titanium  - 007,exact,50,19
+JHAMAL00018-007,2026-04-16,Grade 5 titanium  - 007,JHAMAL00018-007,Grade 5 titanium  - 007,exact,52,0
+JHAMAL00018-007,2026-04-21,Grade 5 titanium  - 007,JHAMAL00018-007,Grade 5 titanium  - 007,exact,30,0
+JHAMAL00018-007,2026-04-30,Grade 5 titanium  - 007,JHAMAL00018-007,Grade 5 titanium  - 007,exact,0,21
+JHAMAL00018-008,2026-04-15,Grade 5 titanium  - 008,JHAMAL00018-008,Grade 5 titanium  - 008,exact,50,8
+JHAMAL00018-008,2026-04-16,Grade 5 titanium  - 008,JHAMAL00018-008,Grade 5 titanium  - 008,exact,52,0
+JHAMAL00018-008,2026-04-21,Grade 5 titanium  - 008,JHAMAL00018-008,Grade 5 titanium  - 008,exact,40,0
+JHAMAL00018-008,2026-04-30,Grade 5 titanium  - 008,JHAMAL00018-008,Grade 5 titanium  - 008,exact,0,8
+JHAMAL00018-009,2026-04-15,Grade 5 titanium  - 009,JHAMAL00018-009,Grade 5 titanium  - 009,exact,50,22
+JHAMAL00018-009,2026-04-16,Grade 5 titanium  - 009,JHAMAL00018-009,Grade 5 titanium  - 009,exact,52,0
+JHAMAL00018-009,2026-04-21,Grade 5 titanium  - 009,JHAMAL00018-009,Grade 5 titanium  - 009,exact,40,0
+JHAMAL00018-009,2026-04-30,Grade 5 titanium  - 009,JHAMAL00018-009,Grade 5 titanium  - 009,exact,0,1
+JHAMAL00018-010,2026-04-15,Grade 5 titanium  - 010,JHAMAL00018-010,Grade 5 titanium  - 010,exact,50,18
+JHAMAL00018-010,2026-04-16,Grade 5 titanium  - 010,JHAMAL00018-010,Grade 5 titanium  - 010,exact,52,0
+JHAMAL00018-010,2026-04-21,Grade 5 titanium  - 010,JHAMAL00018-010,Grade 5 titanium  - 010,exact,72,0
+JHAMAL00018-010,2026-04-30,Grade 5 titanium  - 010,JHAMAL00018-010,Grade 5 titanium  - 010,exact,0,9
+JHAMAL00018-011,2026-04-15,Grade 5 titanium  - 011,JHAMAL00018-011,Grade 5 titanium  - 011,exact,50,15
+JHAMAL00018-011,2026-04-16,Grade 5 titanium  - 011,JHAMAL00018-011,Grade 5 titanium  - 011,exact,52,0
+JHAMAL00018-011,2026-04-21,Grade 5 titanium  - 011,JHAMAL00018-011,Grade 5 titanium  - 011,exact,20,0
+JHAMAL00018-011,2026-04-30,Grade 5 titanium  - 011,JHAMAL00018-011,Grade 5 titanium  - 011,exact,0,11
+JHAMAL00018-012,2026-04-16,Grade 5 titanium  - 012,JHAMAL00018-012,Grade 5 titanium  - 012,exact,4,0
+JHAMAL00018-012,2026-04-21,Grade 5 titanium  - 012,JHAMAL00018-012,Grade 5 titanium  - 012,exact,20,0
+JHAMAL00018-013,2026-04-21,Grade 5 titanium  - 013,JHAMAL00018-013,Grade 5 titanium  - 013,exact,20,0
+JHAMAL00018-014,2026-04-21,Grade 5 titanium  - 014,JHAMAL00018-014,Grade 5 titanium  - 014,exact,20,0
+JHAMAL00018-015,2026-04-21,Grade 5 titanium  - 015,JHAMAL00018-015,Grade 5 titanium  - 015,exact,20,0
+JHAMAL00018-016,2026-04-21,Grade 5 titanium  - 016,JHAMAL00018-016,Grade 5 titanium  - 016,exact,62,0
+JHAMAL00018-016,2026-07-09,Grade 5 titanium  - 016,JHAMAL00018-016,Grade 5 titanium  - 016,exact,10,0
+JHAMAL00018-016,2026-07-13,Grade 5 titanium  - 016,JHAMAL00018-016,Grade 5 titanium  - 016,exact,10,0
+JHAMAL00018-017,2026-04-21,Grade 5 titanium  - 017,JHAMAL00018-017,Grade 5 titanium  - 017,exact,62,0
+JHAMAL00018-017,2026-07-10,Grade 5 titanium  - 017,JHAMAL00018-017,Grade 5 titanium  - 017,exact,0,1
+JHAMAL00018-017,2026-07-13,Grade 5 titanium  - 017,JHAMAL00018-017,Grade 5 titanium  - 017,exact,10,0
+JHAMAL00018-018,2026-04-21,Grade 5 titanium  - 018,JHAMAL00018-018,Grade 5 titanium  - 018,exact,20,0
+JHAMAL00018-018,2026-07-10,Grade 5 titanium  - 018,JHAMAL00018-018,Grade 5 titanium  - 018,exact,0,1
+JHAMAL00018-018,2026-07-13,Grade 5 titanium  - 018,JHAMAL00018-018,Grade 5 titanium  - 018,exact,10,0
+JHAMAL00018-019,2026-04-21,Grade 5 titanium  - 019,JHAMAL00018-019,Grade 5 titanium  - 019,exact,20,0
+JHAMAL00018-019,2026-07-13,Grade 5 titanium  - 019,JHAMAL00018-019,Grade 5 titanium  - 019,exact,10,0
+JHAMAL00018-020,2026-04-21,Grade 5 titanium  - 020,JHAMAL00018-020,Grade 5 titanium  - 020,exact,20,0
+JHAMAL00018-020,2026-07-13,Grade 5 titanium  - 020,JHAMAL00018-020,Grade 5 titanium  - 020,exact,10,0
+JHAMAL00018-021,2026-04-21,Grade 5 titanium  - 021,JHAMAL00018-021,Grade 5 titanium  - 021,exact,20,0
+JHAMAL00018-021,2026-07-10,Grade 5 titanium  - 021,JHAMAL00018-021,Grade 5 titanium  - 021,exact,0,5
+JHAMAL00018-021,2026-07-13,Grade 5 titanium  - 021,JHAMAL00018-021,Grade 5 titanium  - 021,exact,10,0
+JHAMAL00018-022,2026-04-21,Grade 5 titanium  - 022,JHAMAL00018-022,Grade 5 titanium  - 022,exact,20,0
+JHAMAL00018-023,2026-04-21,Grade 5 titanium  - 023,JHAMAL00018-023,Grade 5 titanium  - 023,exact,20,0
+JHAMAL00018-024,2026-04-21,Grade 5 titanium  - 024,JHAMAL00018-024,Grade 5 titanium  - 024,exact,20,0
+JHAMAL00018-025,2026-04-21,Grade 5 titanium  - 025,JHAMAL00018-025,Grade 5 titanium  - 025,exact,20,0
+JHAMAL00018-028,2026-09-15,Grade 5 titanium  - 028,JHAMAL00018-028,Grade 5 titanium  - 028,exact,30,24
+JHAMAL00018-051,2026-07-29,Grade 5 titanium  - 051,JHAMAL00018-051,Grade 5 titanium  - 051,exact,0,22
+JHAMAL00018-052,2026-07-29,Grade 5 titanium  - 052,JHAMAL00018-052,Grade 5 titanium  - 052,exact,0,20
+JHAMAL00018-053,2026-07-29,Grade 5 titanium  - 053,JHAMAL00018-053,Grade 5 titanium  - 053,exact,0,21
+JHAMAL00018-054,2026-07-29,Grade 5 titanium  - 054,JHAMAL00018-054,Grade 5 titanium  - 054,exact,0,23
+JHAMAL00018-055,2026-07-29,Grade 5 titanium  - 055,JHAMAL00018-055,Grade 5 titanium  - 055,exact,0,23
+JHAMAL00018-056,2026-07-29,Grade 5 titanium  - 056,JHAMAL00018-056,Grade 5 titanium  - 056,exact,0,20
+JHAMAL00018-058,2026-08-12,Grade 5 titanium  - 058,JHAMAL00018-058,Grade 5 titanium  - 058,exact,100,72
+JHAMAL00018-059,2026-08-12,Grade 5 titanium  - 059,JHAMAL00018-059,Grade 5 titanium  - 059,exact,100,75
+JHAMAL00018-060,2026-08-12,Grade 5 titanium  - 060,JHAMAL00018-060,Grade 5 titanium  - 060,exact,100,75
+JHAMAL00018-061,2026-08-12,Grade 5 titanium  - 061,JHAMAL00018-061,Grade 5 titanium  - 061,exact,100,72
+JHAMAL00018-062,2026-08-12,Grade 5 titanium  - 062,JHAMAL00018-062,Grade 5 titanium  - 062,exact,100,75
+JHAMAL00018-063,2026-08-05,Grade 5 titanium  - 063,JHAMAL00018-063,Grade 5 titanium  - 063,exact,100,20
+JHAMAL00018-064,2026-08-05,Grade 5 titanium  - 064,JHAMAL00018-064,Grade 5 titanium  - 064,exact,100,21
+JHAMAL00018-065,2026-08-05,Grade 5 titanium  - 065,JHAMAL00018-065,Grade 5 titanium  - 065,exact,100,23
+JHAMAL00018-066,2026-08-05,Grade 5 titanium  - 066,JHAMAL00018-066,Grade 5 titanium  - 066,exact,100,8
+JHAMAL00018-067,2026-08-05,Grade 5 titanium  - 067,JHAMAL00018-067,Grade 5 titanium  - 067,exact,100,21
+JHAMAL00018-068,2026-08-05,Grade 5 titanium  - 068,JHAMAL00018-068,Grade 5 titanium  - 068,exact,50,23
+JHAMAL00020-S4R1C3,2026-09-19,TiV20260605 - S4R1C3,JHAMAL00020-S4R1C3,TiV20260605 - S4R1C3,exact,32,0
+JHAMAL00020-S4R1C3,2026-09-24,TiV20260605 - S4R1C3,JHAMAL00020-S4R1C3,TiV20260605 - S4R1C3,exact,32,0
+JHAMAL00020-S4R1C3,2026-10-01,TiV20260605 - S4R1C3,JHAMAL00020-S4R1C3,TiV20260605 - S4R1C3,exact,14,0
+JHAMAL00020-S4R4C2,2026-09-19,TiV20260605 - S4R4C2,JHAMAL00020-S4R4C2,TiV20260605 - S4R4C2,exact,32,0
+JHAMAL00020-S4R4C2,2026-09-24,TiV20260605 - S4R4C2,JHAMAL00020-S4R4C2,TiV20260605 - S4R4C2,exact,32,0
+JHAMAL00020-S4R4C2,2026-10-01,TiV20260605 - S4R4C2,JHAMAL00020-S4R4C2,TiV20260605 - S4R4C2,exact,32,0
+JHAMAL00020-S4R5C1,2026-09-19,TiV20260605 - S4R5C1,JHAMAL00020-S4R5C1,TiV20260605 - S4R5C1,exact,32,0
+JHAMAL00020-S4R5C1,2026-09-24,TiV20260605 - S4R5C1,JHAMAL00020-S4R5C1,TiV20260605 - S4R5C1,exact,32,0
+JHAMAL00020-S4R5C1,2026-10-01,TiV20260605 - S4R5C1,JHAMAL00020-S4R5C1,TiV20260605 - S4R5C1,exact,32,0
+JHAMAL00020-S4R5C2,2026-09-19,TiV20260605 - S4R5C2,JHAMAL00020-S4R5C2,TiV20260605 - S4R5C2,exact,32,0
+JHAMAL00020-S4R5C2,2026-09-24,TiV20260605 - S4R5C2,JHAMAL00020-S4R5C2,TiV20260605 - S4R5C2,exact,32,0
+JHAMAL00020-S4R5C2,2026-10-01,TiV20260605 - S4R5C2,JHAMAL00020-S4R5C2,TiV20260605 - S4R5C2,exact,32,0
+JHAMAL00020-S4R6C3,2026-09-19,TiV20260605 - S4R6C3,JHAMAL00020-S4R6C3,TiV20260605 - S4R6C3,exact,32,0
+JHAMAL00020-S4R6C3,2026-09-24,TiV20260605 - S4R6C3,JHAMAL00020-S4R6C3,TiV20260605 - S4R6C3,exact,32,0
+JHAMAL00020-S4R6C3,2026-10-01,TiV20260605 - S4R6C3,JHAMAL00020-S4R6C3,TiV20260605 - S4R6C3,exact,32,0
+JHAMAL00020-S8R0C1,2026-09-21,TiV20260605 - S8R0C1,JHAMAL00020-S8R0C1,TiV20260605 - S8R0C1,exact,32,0
+JHAMAL00020-S8R0C1,2026-09-24,TiV20260605 - S8R0C1,JHAMAL00020-S8R0C1,TiV20260605 - S8R0C1,exact,32,0
+JHAMAL00020-S8R0C1,2026-10-01,TiV20260605 - S8R0C1,JHAMAL00020-S8R0C1,TiV20260605 - S8R0C1,exact,32,0
+JHAMAL00020-S8R2C1,2026-09-21,TiV20260605 - S8R2C1,JHAMAL00020-S8R2C1,TiV20260605 - S8R2C1,exact,32,0
+JHAMAL00020-S8R2C1,2026-09-24,TiV20260605 - S8R2C1,JHAMAL00020-S8R2C1,TiV20260605 - S8R2C1,exact,32,0
+JHAMAL00020-S8R2C1,2026-10-02,TiV20260605 - S8R2C1,JHAMAL00020-S8R2C1,TiV20260605 - S8R2C1,exact,32,0
+JHAMAL00020-S8R2C4,2026-09-21,TiV20260605 - S8R2C4,JHAMAL00020-S8R2C4,TiV20260605 - S8R2C4,exact,32,0
+JHAMAL00020-S8R2C4,2026-09-24,TiV20260605 - S8R2C4,JHAMAL00020-S8R2C4,TiV20260605 - S8R2C4,exact,32,0
+JHAMAL00020-S8R2C4,2026-10-02,TiV20260605 - S8R2C4,JHAMAL00020-S8R2C4,TiV20260605 - S8R2C4,exact,32,0
+JHAMAL00020-S8R3C0,2026-09-21,TiV20260605 - S8R3C0,JHAMAL00020-S8R3C0,TiV20260605 - S8R3C0,exact,32,0
+JHAMAL00020-S8R3C0,2026-09-24,TiV20260605 - S8R3C0,JHAMAL00020-S8R3C0,TiV20260605 - S8R3C0,exact,32,0
+JHAMAL00020-S8R3C0,2026-10-02,TiV20260605 - S8R3C0,JHAMAL00020-S8R3C0,TiV20260605 - S8R3C0,exact,32,0
+JHAMAL00020-S8R3C1,2026-09-21,TiV20260605 - S8R3C1,JHAMAL00020-S8R3C1,TiV20260605 - S8R3C1,exact,32,0
+JHAMAL00020-S8R3C1,2026-09-24,TiV20260605 - S8R3C1,JHAMAL00020-S8R3C1,TiV20260605 - S8R3C1,exact,32,0
+JHAMAL00020-S8R3C1,2026-10-02,TiV20260605 - S8R3C1,JHAMAL00020-S8R3C1,TiV20260605 - S8R3C1,exact,32,0
+JHAMAL00020-S8R3C4,2026-09-21,TiV20260605 - S8R3C4,JHAMAL00020-S8R3C4,TiV20260605 - S8R3C4,exact,32,0
+JHAMAL00020-S8R3C4,2026-09-24,TiV20260605 - S8R3C4,JHAMAL00020-S8R3C4,TiV20260605 - S8R3C4,exact,32,0
+JHAMAL00020-S8R3C4,2026-10-02,TiV20260605 - S8R3C4,JHAMAL00020-S8R3C4,TiV20260605 - S8R3C4,exact,32,0
+JHAMAL00020-S8R4C1,2026-09-21,TiV20260605 - S8R4C1,JHAMAL00020-S8R4C1,TiV20260605 - S8R4C1,exact,32,0
+JHAMAL00020-S8R4C1,2026-09-24,TiV20260605 - S8R4C1,JHAMAL00020-S8R4C1,TiV20260605 - S8R4C1,exact,32,0
+JHAMAL00020-S8R4C1,2026-10-02,TiV20260605 - S8R4C1,JHAMAL00020-S8R4C1,TiV20260605 - S8R4C1,exact,32,0
+JHAMAL00020-S8R5C1,2026-09-21,TiV20260605 - S8R5C1,JHAMAL00020-S8R5C1,TiV20260605 - S8R5C1,exact,32,0
+JHAMAL00020-S8R5C1,2026-09-24,TiV20260605 - S8R5C1,JHAMAL00020-S8R5C1,TiV20260605 - S8R5C1,exact,32,0
+JHAMAL00020-S8R5C1,2026-10-02,TiV20260605 - S8R5C1,JHAMAL00020-S8R5C1,TiV20260605 - S8R5C1,exact,32,0
+JHAMAL00020-S8R5C3,2026-09-21,TiV20260605 - S8R5C3,JHAMAL00020-S8R5C3,TiV20260605 - S8R5C3,exact,32,0
+JHAMAL00020-S8R5C3,2026-09-24,TiV20260605 - S8R5C3,JHAMAL00020-S8R5C3,TiV20260605 - S8R5C3,exact,14,0
+JHAMAL00020-S8R5C3,2026-10-02,TiV20260605 - S8R5C3,JHAMAL00020-S8R5C3,TiV20260605 - S8R5C3,exact,32,0
+JHAMAL00020-S8R7C0,2026-09-22,TiV20260605 - S8R7C0,JHAMAL00020-S8R7C0,TiV20260605 - S8R7C0,exact,32,0
+JHAMAL00020-S8R7C0,2026-10-02,TiV20260605 - S8R7C0,JHAMAL00020-S8R7C0,TiV20260605 - S8R7C0,exact,32,0
+JHAMAL00020-S8R7C3,2026-09-22,TiV20260605 - S8R7C3,JHAMAL00020-S8R7C3,TiV20260605 - S8R7C3,exact,32,0
+JHAMAL00020-S8R7C3,2026-10-02,TiV20260605 - S8R7C3,JHAMAL00020-S8R7C3,TiV20260605 - S8R7C3,exact,24,0
+JHAMAL00020-S8R7C4,2026-09-22,TiV20260605 - S8R7C4,JHAMAL00020-S8R7C4,TiV20260605 - S8R7C4,exact,32,0
+JHAMAL00020-S8R7C4,2026-10-02,TiV20260605 - S8R7C4,JHAMAL00020-S8R7C4,TiV20260605 - S8R7C4,exact,32,0
+JHAMAL00021-001,2026-08-18,Titanium Grade 4 - 001,JHAMAL00021-001,Titanium Grade 4 - 001,exact,100,75
+JHAMAL00021-002,2026-08-18,Titanium Grade 4 - 002,JHAMAL00021-002,Titanium Grade 4 - 002,exact,100,75
+JHAMAL00021-003,2026-08-18,Titanium Grade 4 - 003,JHAMAL00021-003,Titanium Grade 4 - 003,exact,100,75
+JHAMAL00021-004,2026-08-18,Titanium Grade 4 - 004,JHAMAL00021-004,Titanium Grade 4 - 004,exact,100,75
+JHAMAL00021-005,2026-08-18,Titanium Grade 4 - 005,JHAMAL00021-005,Titanium Grade 4 - 005,exact,100,75
+JHAMAL00021-006,2026-08-18,Titanium Grade 4 - 006,JHAMAL00021-006,Titanium Grade 4 - 006,exact,100,75
+JHAMAL00021-007,2026-08-18,Titanium Grade 4 - 007,JHAMAL00021-007,Titanium Grade 4 - 007,exact,100,75
+JHAMAL00021-008,2026-08-18,Titanium Grade 4 - 008,JHAMAL00021-008,Titanium Grade 4 - 008,exact,100,75
+JHAMAL00021-009,2026-08-26,Titanium Grade 4 - 009,JHAMAL00021-009,Titanium Grade 4 - 009,exact,50,27
+JHAMAL00021-009,2026-08-27,Titanium Grade 4 - 009,JHAMAL00021-009,Titanium Grade 4 - 009,exact,50,0
+JHAMAL00021-010,2026-08-26,Titanium Grade 4 - 010,JHAMAL00021-010,Titanium Grade 4 - 010,exact,50,75
+JHAMAL00021-010,2026-08-27,Titanium Grade 4 - 010,JHAMAL00021-010,Titanium Grade 4 - 010,exact,50,0
+JHAMAL00021-011,2026-08-26,Titanium Grade 4 - 011,JHAMAL00021-011,Titanium Grade 4 - 011,exact,50,75
+JHAMAL00021-011,2026-08-27,Titanium Grade 4 - 011,JHAMAL00021-011,Titanium Grade 4 - 011,exact,50,0
+JHAMAL00021-012,2026-08-26,Titanium Grade 4 - 012,JHAMAL00021-012,Titanium Grade 4 - 012,exact,50,75
+JHAMAL00021-012,2026-08-27,Titanium Grade 4 - 012,JHAMAL00021-012,Titanium Grade 4 - 012,exact,50,0
+JHAMAL00021-013,2026-09-03,Titanium Grade 4 - 013,JHAMAL00021-013,Titanium Grade 4 - 013,exact,50,39
+JHAMAL00021-014,2026-09-03,Titanium Grade 4 - 014,JHAMAL00021-014,Titanium Grade 4 - 014,exact,50,0
+JHAMAL00021-015,2026-09-03,Titanium Grade 4 - 015,JHAMAL00021-015,Titanium Grade 4 - 015,exact,50,72
+JHAMAL00021-016,2026-09-03,Titanium Grade 4 - 016,JHAMAL00021-016,Titanium Grade 4 - 016,exact,50,75
+JHAMAL00021-017,2026-09-03,Titanium Grade 4 - 017,JHAMAL00021-017,Titanium Grade 4 - 017,exact,50,75
+JHAMAL00021-017,2026-09-09,Titanium Grade 4 - 017,JHAMAL00021-017,Titanium Grade 4 - 017,exact,100,75
+JHAMAL00021-018,2026-09-03,Titanium Grade 4 - 018,JHAMAL00021-018,Titanium Grade 4 - 018,exact,50,75
+JHAMAL00021-019,2026-09-09,Titanium Grade 4 - 019,JHAMAL00021-019,Titanium Grade 4 - 019,exact,100,74
+JHAMAL00021-020,2026-09-09,Titanium Grade 4 - 020,JHAMAL00021-020,Titanium Grade 4 - 020,exact,100,75
+JHAMAL00021-021,2026-09-09,Titanium Grade 4 - 021,JHAMAL00021-021,Titanium Grade 4 - 021,exact,100,75
+JHAMAL00021-022,2026-09-09,Titanium Grade 4 - 022,JHAMAL00021-022,Titanium Grade 4 - 022,exact,100,75
+JHAMAL00021-023,2026-09-09,Titanium Grade 4 - 023,JHAMAL00021-023,Titanium Grade 4 - 023,exact,100,0
+JHAMAL00022-001,2026-08-26,Ti Grade 3 - 001,JHAMAL00022-001,Ti Grade 3 - 001,exact,50,75
+JHAMAL00022-001,2026-08-27,Ti Grade 3 - 001,JHAMAL00022-001,Ti Grade 3 - 001,exact,50,0
+JHAMAL00022-002,2026-08-26,Ti Grade 3 - 002,JHAMAL00022-002,Ti Grade 3 - 002,exact,100,75
+JHAMAL00022-003,2026-08-26,Ti Grade 3 - 003,JHAMAL00022-003,Ti Grade 3 - 003,exact,100,75
+JHAMAL00022-004,2026-08-26,Ti Grade 3 - 004,JHAMAL00022-004,Ti Grade 3 - 004,exact,50,75
+JHAMAL00022-004,2026-08-27,Ti Grade 3 - 004,JHAMAL00022-004,Ti Grade 3 - 004,exact,50,0
+JHAMAL00022-005,2026-09-03,Ti Grade 3 - 005,JHAMAL00022-005,Ti Grade 3 - 005,exact,50,75
+JHAMAL00022-006,2026-09-03,Ti Grade 3 - 006,JHAMAL00022-006,Ti Grade 3 - 006,exact,50,75
+JHAMAL00022-007,2026-09-03,Ti Grade 3 - 007,JHAMAL00022-007,Ti Grade 3 - 007,exact,80,75
+JHAMAL00022-007,2026-09-09,Ti Grade 3 - 007,JHAMAL00022-007,Ti Grade 3 - 007,exact,100,0
+JHAMAL00022-008,2026-09-03,Ti Grade 3 - 008,JHAMAL00022-008,Ti Grade 3 - 008,exact,50,75
+JHAMAL00022-009,2026-09-03,Ti Grade 3 - 009,JHAMAL00022-009,Ti Grade 3 - 009,exact,50,75
+JHAMAL00022-010,2026-09-03,Ti Grade 3 - 010,JHAMAL00022-010,Ti Grade 3 - 010,exact,50,0
+JHAMAL00022-011,2026-09-09,Ti Grade 3 - 011,JHAMAL00022-011,Ti Grade 3 - 011,exact,100,69
+JHAMAL00022-012,2026-09-09,Ti Grade 3 - 012,JHAMAL00022-012,Ti Grade 3 - 012,exact,100,72
+JHAMAL00022-013,2026-09-09,Ti Grade 3 - 013,JHAMAL00022-013,Ti Grade 3 - 013,exact,100,63
+JHAMAL00022-014,2026-09-09,Ti Grade 3 - 014,JHAMAL00022-014,Ti Grade 3 - 014,exact,100,75
+JHAMAL00022-015,2026-09-09,Ti Grade 3 - 015,JHAMAL00022-015,Ti Grade 3 - 015,exact,100,66
+JHAMAL00023,2026-08-27,Ti test sample,JHAMAL00023,Ti test sample,exact,4,0
+JHBMAI00003-S1R0C4,2026-05-08,TiV20251006 - S1R0C4,JHBMAI00003-S1R0C4,TiV20251006 - S1R0C4,exact,24,0
+JHBMAI00003-S1R1C4,2026-03-07,TiV20251006 - S1R1C4,JHBMAI00003-S1R1C4,TiV20251006 - S1R1C4,exact,242,0
+JHBMAI00003-S1R2C4,2026-05-08,TiV20251006 - S1R2C4,JHBMAI00003-S1R2C4,TiV20251006 - S1R2C4,exact,24,0
+JHBMAI00003-S1R3C3,2026-02-25,TiV20251006 - S1R3C3,JHBMAI00003-S1R3C3,TiV20251006 - S1R3C3,exact,90,0
+JHBMAI00003-S1R3C3,2026-03-03,TiV20251006 - S1R3C3,JHBMAI00003-S1R3C3,TiV20251006 - S1R3C3,exact,434,0
+JHBMAI00003-S1R3C3,2026-03-06,TiV20251006 - S1R3C3,JHBMAI00003-S1R3C3,TiV20251006 - S1R3C3,exact,242,0
+JHBMAI00003-S1R4C3,2026-05-08,TiV20251006 - S1R4C3,JHBMAI00003-S1R4C3,TiV20251006 - S1R4C3,exact,24,0
+JHBMAI00003-S1R5C2,2026-02-25,TiV20251006 - S1R5C2,JHBMAI00003-S1R5C2,TiV20251006 - S1R5C2,exact,242,0
+JHBMAI00003-S1R6C0,2026-05-08,TiV20251006 - S1R6C0,JHBMAI00003-S1R6C0,TiV20251006 - S1R6C0,exact,24,0
+JHBMAI00005-001,2026-09-18,TiV DED Block from LLNL (Thomas Voisin) - 001,JHBMAI00005-001,TiV DED Block from LLNL (Thomas Voisin) - 001,exact,50,19
+JHBMAI00005-001,2026-09-22,TiV DED Block from LLNL (Thomas Voisin) - 001,JHBMAI00005-001,TiV DED Block from LLNL (Thomas Voisin) - 001,exact,50,0
+JHBMAI00005-002,2026-09-18,TiV DED Block from LLNL (Thomas Voisin) - 002,JHBMAI00005-002,TiV DED Block from LLNL (Thomas Voisin) - 002,exact,50,19
+JHBMAI00005-002,2026-09-22,TiV DED Block from LLNL (Thomas Voisin) - 002,JHBMAI00005-002,TiV DED Block from LLNL (Thomas Voisin) - 002,exact,50,0
+JHBMAI00005-003,2026-09-18,TiV DED Block from LLNL (Thomas Voisin) - 003,JHBMAI00005-003,TiV DED Block from LLNL (Thomas Voisin) - 003,exact,50,7
+JHBMAI00005-003,2026-09-22,TiV DED Block from LLNL (Thomas Voisin) - 003,JHBMAI00005-003,TiV DED Block from LLNL (Thomas Voisin) - 003,exact,50,0
+JHBMAI00005-004,2026-09-18,TiV DED Block from LLNL (Thomas Voisin) - 004,JHBMAI00005-004,TiV DED Block from LLNL (Thomas Voisin) - 004,exact,50,12
+JHBMAI00005-004,2026-09-22,TiV DED Block from LLNL (Thomas Voisin) - 004,JHBMAI00005-004,TiV DED Block from LLNL (Thomas Voisin) - 004,exact,50,0
+JHBMAI00005-005,2026-09-18,TiV DED Block from LLNL (Thomas Voisin) - 005,JHBMAI00005-005,TiV DED Block from LLNL (Thomas Voisin) - 005,exact,50,16
+JHBMAI00005-005,2026-09-22,TiV DED Block from LLNL (Thomas Voisin) - 005,JHBMAI00005-005,TiV DED Block from LLNL (Thomas Voisin) - 005,exact,50,0
+JHBMAI00005-006,2026-09-18,TiV DED Block from LLNL (Thomas Voisin) - 006,JHBMAI00005-006,TiV DED Block from LLNL (Thomas Voisin) - 006,exact,50,15
+JHBMAI00005-006,2026-09-22,TiV DED Block from LLNL (Thomas Voisin) - 006,JHBMAI00005-006,TiV DED Block from LLNL (Thomas Voisin) - 006,exact,48,0
+JHBMAL00001,2026-01-24,Ti-V DED gradient,JHBMAL00001,Ti-V DED gradient,exact,0,37
+JHXMAL00004,2026-03-23,Ti6Al4V-SampleRun-Thin,JHXMAL00004,Ti6Al4V-SampleRun-Thin,exact,10,0
+JHXMAL00005,2026-03-23,Ti6Al4V-SampleRun-Thick,JHXMAL00005,Ti6Al4V-SampleRun-Thick,exact,10,0
+JHXMAL00007,2026-09-23,TiNbV-20260608-811,JHXMAL00007,TiNbV-20260608-811,exact,100,0
+JHXMAL00007,2026-09-25,TiNbV-20260608-811,JHXMAL00007,TiNbV-20260608-811,exact,250,0
+JHXMAL00007,2026-10-02,TiNbV-20260608-811,JHXMAL00007,TiNbV-20260608-811,exact,100,0
+JHXMAL00007,2026-10-15,TiNbV-20260608-811,JHXMAL00007,TiNbV-20260608-811,exact,50,0
+JHXMAL00008,2026-09-25,TiVNb-2026-0608-821,JHXMAL00008,TiVNb-2026-0608-821,exact,250,0
+JHXMAL00008,2026-09-28,TiVNb-2026-0608-821,JHXMAL00008,TiVNb-2026-0608-821,exact,100,0
+JHXMAL00008,2026-10-02,TiVNb-2026-0608-821,JHXMAL00008,TiVNb-2026-0608-821,exact,100,0
+JHXMAL00008,2026-10-15,TiVNb-2026-0608-821,JHXMAL00008,TiVNb-2026-0608-821,exact,50,0
+JHXMAL00009,2026-09-25,TiVNb-20260608-831,JHXMAL00009,TiVNb-20260608-831,exact,250,0
+JHXMAL00009,2026-09-28,TiVNb-20260608-831,JHXMAL00009,TiVNb-20260608-831,exact,100,0
+JHXMAL00009,2026-10-02,TiVNb-20260608-831,JHXMAL00009,TiVNb-20260608-831,exact,98,0
+JHXMAL00009,2026-10-15,TiVNb-20260608-831,JHXMAL00009,TiVNb-20260608-831,exact,50,0
+JHXMAL00010,2026-10-02,TiVNb-20260608-841,JHXMAL00010,TiVNb-20260608-841,exact,100,0
+JHXMAL00010,2026-10-15,TiVNb-20260608-841,JHXMAL00010,TiVNb-20260608-841,exact,50,0
+NWXMAB00010-001-001,2026-07-03,Ti foil carburized - 001 - 001,NWXMAB00010-001-001,Ti foil carburized - 001 - 001,exact,170,0
+NWXMAB00010-002-001,2026-07-03,Ti foil carburized - 002 - 001,NWXMAB00010-002-001,Ti foil carburized - 002 - 001,exact,170,0
+NWXMAB00010-002-001,2026-07-06,Ti foil carburized - 002 - 001,NWXMAB00010-002-001,Ti foil carburized - 002 - 001,exact,0,3

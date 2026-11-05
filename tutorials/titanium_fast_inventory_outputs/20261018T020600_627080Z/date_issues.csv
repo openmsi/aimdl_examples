@@ -1,0 +1,4 @@
+igsn,title,title_source_igsn,matched_title,match_relation,experiment_date,experiment_date_original,technique,item_id,item_name
+JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,JHAMAC00001-S1R5C1,Combinatorial synthesis of 200 micron thick graded Cu-Ti foils - S1R5C1,exact,UNKNOWN_DATE,,XRD,699f938b7590bb7e1ed0ef93,scan_point_1_master.h5.missing_data
+JHAMAL00018-001,Grade 5 titanium  - 001,JHAMAL00018-001,Grade 5 titanium  - 001,exact,UNKNOWN_DATE,,XRD,69dfe354917593d318ab0ecd,scan_point_18_master.h5
+JHAMAL00016-008,"Commercially pure, grade 2 titanium  - 008",JHAMAL00016-008,"Commercially pure, grade 2 titanium  - 008",exact,UNKNOWN_DATE,,XRD,69dfe4d26cb2d97d89d763cf,scan_point_18_master.h5

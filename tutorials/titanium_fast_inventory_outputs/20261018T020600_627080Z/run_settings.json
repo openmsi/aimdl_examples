@@ -1,0 +1,21 @@
+{
+  "exported_at_utc": "2026-10-18T02:06:00.784861+00:00",
+  "api_url": "https://data.htmdec.org/api/v1",
+  "include_children": true,
+  "title_terms_case_sensitive": [
+    "Ti"
+  ],
+  "title_terms_case_insensitive": [
+    "titanium"
+  ],
+  "extra_igsns": [],
+  "exclude_igsns": [],
+  "data_types": {
+    "xrd_raw": "XRD",
+    "pdv_trace": "PDV"
+  },
+  "date_rule": "calendar date as recorded; no timezone conversion",
+  "count_rule": "distinct raw-classified item IDs; not verified file counts",
+  "summary_rows": 534,
+  "raw_items": 39080
+}
